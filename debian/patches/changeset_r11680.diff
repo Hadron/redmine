@@ -1,0 +1,14 @@
+--- a/lib/redmine/scm/adapters/abstract_adapter.rb
++++ b/lib/redmine/scm/adapters/abstract_adapter.rb
+@@ -228,9 +228,9 @@ module Redmine
+         def self.shellout(cmd, options = {}, &block)
+           if logger && logger.debug?
+             logger.debug "Shelling out: #{strip_credential(cmd)}"
++            # Capture stderr in a log file
++            cmd = "#{cmd} 2>>#{shell_quote(stderr_log_file)}"
+           end
+-          # Capture stderr in a log file
+-          cmd = "#{cmd} 2>>#{shell_quote(stderr_log_file)}"
+           begin
+             mode = "r+"
+             IO.popen(cmd, mode) do |io|

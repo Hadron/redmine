@@ -1,0 +1,114 @@
+Source: redmine
+Section: web
+Priority: extra
+Maintainer: Jérémy Lal <kapouer@melix.org>
+Uploaders: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.alioth.debian.org>,
+ Antonio Terceiro <terceiro@debian.org>
+Build-Depends: debhelper (>= 7), cdbs, ttf2ufm, ttf-dejavu, ttf-freefont, php5-cli
+Build-Depends-Indep: po-debconf
+Standards-Version: 3.9.5
+Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-ruby-extras/redmine.git
+Vcs-Git: git://anonscm.debian.org/pkg-ruby-extras/redmine.git
+Homepage: http://www.redmine.org
+Testsuite: autopkgtest
+
+Package: redmine
+Architecture: all
+Pre-Depends: debconf
+Depends: ruby | ruby-interpreter,
+ ruby-rails (>= 2:4),
+ ruby-jquery-rails,
+ bundler,
+ ruby-rails-observers,
+ dbconfig-common,
+ redmine-sqlite | redmine-mysql | redmine-pgsql,
+ ruby-rack (>= 1.4.5~),
+ ruby-coderay (>= 1.0.6),
+ ruby-mime-types (>= 1.25),
+ ruby-net-ldap (>= 0.3.1),
+ ruby-openid,
+ ruby-rack-openid,
+ libjs-scriptaculous,
+ ruby-i18n (>= 0.6.9-1~),
+ ruby-awesome-nested-set,
+ ruby-request-store,
+ ruby-protected-attributes,
+ ruby-actionpack-action-caching,
+ ruby-redcarpet,
+ ruby-rmagick,
+ ${misc:Depends}
+Breaks: redmine-plugin-botsfilter (<=1.02-2),
+ redmine-plugin-recaptcha (<=0.1.0+git20121018)
+Conflicts: ruby-passenger (<< 3), ruby-activesupport-2.3, ruby-activesupport-3.2
+Recommends: ruby-passenger, libfcgi-ruby1.9.1 | libfcgi-ruby
+Suggests:
+ bzr,
+ cvs,
+ darcs,
+ git,
+ mercurial,
+ subversion
+Description: flexible project management web application
+ Redmine is a flexible project management web application. Written using Ruby
+ on Rails framework, it is cross-platform and cross-database.
+ .
+ Dependencies for database support are provided by these metapackages:
+ redmine-mysql, redmine-pgsql, redmine-sqlite.
+ .
+ Features
+   * Multiple projects support
+   * Flexible role based access control
+   * Flexible issue tracking system
+   * Gantt chart and calendar
+   * News, documents & files management
+   * Feeds & email notifications
+   * Per project wiki
+   * Per project forums
+   * Time tracking
+   * Custom fields for issues, time-entries, projects and users
+   * SCM integration (SVN, CVS, Git, Mercurial, Bazaar and Darcs)
+   * Issue creation via email
+   * Multiple LDAP authentication support
+   * User self-registration support
+   * Multilanguage support
+
+Package: redmine-mysql
+Architecture: all
+Depends: ruby-mysql2,
+ mysql-client | virtual-mysql-client,
+ ${misc:Depends}
+Recommends: redmine (= ${source:Version})
+Suggests: mysql-server
+Description: metapackage providing MySQL dependencies for Redmine
+ This package only provides MySQL dependencies for Redmine, a
+ flexible project management web application. Install this
+ one if you want to use a MySQL database with Redmine.
+ .
+ Redmine package should be installed along with this package.
+
+Package: redmine-pgsql
+Architecture: all
+Depends: ruby-pg,
+ postgresql-client,
+ ${misc:Depends}
+Recommends: redmine (= ${source:Version})
+Suggests: postgresql
+Description: metapackage providing PostgreSQL dependencies for Redmine
+ This package provides PostgreSQL dependencies for Redmine, a
+ flexible project management web application. Install this
+ one if you want to use a PostgreSQL database with Redmine.
+ .
+ Redmine package should be installed along with this package.
+
+Package: redmine-sqlite
+Architecture: all
+Depends: ruby-sqlite3,
+ sqlite3,
+ ${misc:Depends}
+Recommends: redmine (= ${source:Version})
+Description: metapackage providing sqlite dependencies for Redmine
+ This package provides sqlite dependencies for Redmine, a
+ flexible project management web application. Install this
+ one if you want to use a sqlite database with Redmine.
+ .
+ Redmine package should be installed along with this package.

@@ -1,0 +1,64 @@
+--- a/Gemfile
++++ b/Gemfile
+@@ -1,10 +1,10 @@
+ source 'https://rubygems.org'
+ 
+-gem "rails", "4.1.4"
++gem "rails", "~> 4.1.4"
+ gem "jquery-rails", "~> 3.1.1"
+ gem "coderay", "~> 1.1.0"
+ gem "builder", ">= 3.0.4"
+-gem "request_store", "1.0.5"
++gem "request_store", ">= 1.0.5"
+ gem "mime-types"
+ gem "awesome_nested_set", ">= 3.0.0.rc.6"
+ gem "protected_attributes"
+@@ -15,12 +15,12 @@ gem 'tzinfo-data', platforms: [:mingw, :
+ 
+ # Optional gem for LDAP authentication
+ group :ldap do
+-  gem "net-ldap", "~> 0.3.1"
++  gem "net-ldap", ">= 0.3.1"
+ end
+ 
+ # Optional gem for OpenID authentication
+ group :openid do
+-  gem "ruby-openid", "~> 2.3.0", :require => "openid"
++  gem "ruby-openid", ">= 2.3.0", :require => "openid"
+   gem "rack-openid"
+ end
+ 
+@@ -46,7 +46,10 @@ end
+ # configuration file
+ require 'erb'
+ require 'yaml'
+-database_file = File.join(File.dirname(__FILE__), "config/database.yml")
++# FIXME duplicating logic in config/application.rb
++ENV['X_DEBIAN_SITEID'] ||= 'default'
++ENV['RAILS_ETC'] ||= "/etc/redmine/#{ENV['X_DEBIAN_SITEID']}"
++database_file = File.join(ENV['RAILS_ETC'], "database.yml")
+ if File.exist?(database_file)
+   database_config = YAML::load(ERB.new(IO.read(database_file)).result)
+   adapters = database_config.values.map {|c| c['adapter']}.compact.uniq
+@@ -78,21 +81,6 @@ else
+   warn("Please configure your config/database.yml first")
+ end
+ 
+-group :development do
+-  gem "rdoc", ">= 2.4.2"
+-  gem "yard"
+-end
+-
+-group :test do
+-  gem "minitest"
+-  gem "shoulda"
+-  gem "shoulda-context"
+-  gem "mocha", :require => 'mocha/api'
+-  # For running UI tests
+-  gem "capybara", "~> 2.1.0"
+-  gem "selenium-webdriver"
+-end
+-
+ local_gemfile = File.join(File.dirname(__FILE__), "Gemfile.local")
+ if File.exists?(local_gemfile)
+   eval_gemfile local_gemfile

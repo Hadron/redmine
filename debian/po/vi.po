@@ -1,0 +1,124 @@
+# Vietnamese translation for Redmine.
+# Copyright © 2010 Free Software Foundation, Inc.
+# This file is distributed under the same license as the redmine package.
+# Clytie Siddall <clytie@riverland.net.au>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: redmine 1.0.0-4\n"
+"Report-Msgid-Bugs-To: redmine@packages.debian.org\n"
+"POT-Creation-Date: 2010-08-13 14:00+0200\n"
+"PO-Revision-Date: 2010-09-30 22:07+0930\n"
+"Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
+"Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: LocFactoryEditor 1.8\n"
+
+#. Type: note
+#. Description
+#: ../templates:1001
+msgid "Redmine package now supports multiple instances"
+msgstr "Gói Redmine này hỗ trợ nhiều thể hiện"
+
+#. Type: note
+#. Description
+#: ../templates:1001
+msgid ""
+"You are migrating from an unsupported version. The current instance will be "
+"now called the \"default\" instance. Please check your web server "
+"configuration files, see README.Debian."
+msgstr ""
+"Bạn đang nâng cấp từ một phiên bản không phải được hỗ trợ. Thể hiện mà hiện "
+"thời này được gọi như là thể hiện « mặc định » (default). Hãy kiểm tra các "
+"tập tin cấu hình của trình phục vụ Web, xem tài liệu Đọc Đi README.Debian."
+
+#. Type: string
+#. Description
+#: ../templates:2001
+msgid "Redmine instances to be deconfigured:"
+msgstr "Các thể hiện Redmine cần hủy cấu hình:"
+
+#. Type: string
+#. Description
+#: ../templates:2001
+msgid "Configuration files for these instances will be removed."
+msgstr "Các tập tin cấu hình cho những thể hiện này sẽ được gỡ bỏ."
+
+#. Type: string
+#. Description
+#: ../templates:2001
+msgid "Database (de)configuration will be asked accordingly."
+msgstr ""
+"Tiến trình (hủy) cấu hình cơ sở dữ liệu thì được yêu cầu một cách tương ứng."
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid "Redmine instances to be configured or upgraded:"
+msgstr "Các thể hiện Redmine cần cấu hình hoặc nâng cấp:"
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid "Space-separated list of instances identifiers."
+msgstr "Danh sách định giới bằng dấu cách chứa các chuỗi nhận diện thể hiện."
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid ""
+"Each instance has its configuration files in /etc/redmine/<instance-"
+"identifier>/"
+msgstr ""
+"Mỗi thể hiện có một số tập tin cấu hình riêng trong « /etc/redmine/"
+"<chuỗi_nhận_diện_thể_hiện>/ »."
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid "To deconfigure an instance, remove its identifier from this list."
+msgstr ""
+"Để hủy cấu hình một thể hiện nào đó, hãy gỡ bỏ khỏi danh sách này chuỗi nhận "
+"diện nó."
+
+#. Type: select
+#. Description
+#: ../templates:4001
+msgid "Default redmine language:"
+msgstr "Ngôn ngữ redmine mặc định:"
+
+#. Type: error
+#. Description
+#: ../templates:5001
+msgid "redmine-${dbtype} package required"
+msgstr "yêu cầu gói redmine-${dbtype}"
+
+#. Type: error
+#. Description
+#: ../templates:5001
+msgid ""
+"Redmine instance ${instance} is configured to use database type ${dbtype}, "
+"but the corresponding redmine-${dbtype} package is not installed."
+msgstr ""
+"Thể hiện redmine ${instance} được cấu hình để sử dụng cơ sở dữ liệu kiểu "
+"${dbtype}, mà chưa cài đặt gói redmine-${dbtype} tương ứng."
+
+#. Type: error
+#. Description
+#: ../templates:5001
+msgid "Configuration of instance ${instance} is aborted."
+msgstr "Tiến trình cấu hình thể hiện ${instance} bị hủy bỏ."
+
+#. Type: error
+#. Description
+#: ../templates:5001
+msgid ""
+"To finish that configuration, please install the redmine-${dbtype} package, "
+"and reconfigure redmine using:"
+msgstr ""
+"Để kết thúc cấu hình đó, hãy cài đặt gói redmine-${dbtype}, và cấu hình lại "
+"redmine dùng:"

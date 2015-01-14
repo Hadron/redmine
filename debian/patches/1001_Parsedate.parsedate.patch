@@ -1,0 +1,16 @@
+Description: Replace missing ParseDate with DateTime (Closes: #700754)
+Origin: upstream, http://www.redmine.org/projects/redmine/repository/revisions/10439
+Origin: upstream, http://www.redmine.org/projects/redmine/repository/revisions/11091
+Last-Update: 2013-02-26
+--- redmine.orig/lib/SVG/Graph/Schedule.rb
++++ redmine/lib/SVG/Graph/Schedule.rb
+@@ -159,8 +159,7 @@ module SVG
+           if im3 == 0
+             y << data[:data][i]
+           else
+-            arr = ParseDate.parsedate( data[:data][i] )
+-            t = Time.local( *arr[0,6].compact )
++            t = DateTime.parse( data[:data][i] ).to_time
+             (im3 == 1 ? x_start : x_end) << t.to_i
+           end
+         }

@@ -1,0 +1,123 @@
+# translation of redmine_0.9.0~svn2907-1_ru.po to Russian
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Yuri Kozlov <yuray@komyakino.ru>, 2009, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: redmine 1.0.0-4\n"
+"Report-Msgid-Bugs-To: redmine@packages.debian.org\n"
+"POT-Creation-Date: 2010-08-13 14:00+0200\n"
+"PO-Revision-Date: 2010-08-01 16:37+0400\n"
+"Last-Translator: Yuri Kozlov <yuray@komyakino.ru>\n"
+"Language-Team: Russian <debian-l10n-russian@lists.debian.org>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#. Type: note
+#. Description
+#: ../templates:1001
+msgid "Redmine package now supports multiple instances"
+msgstr "Пакет redmine теперь поддерживает несколько экземпляров"
+
+#. Type: note
+#. Description
+#: ../templates:1001
+msgid ""
+"You are migrating from an unsupported version. The current instance will be "
+"now called the \"default\" instance. Please check your web server "
+"configuration files, see README.Debian."
+msgstr ""
+"Вы выполняете переход с неподдерживаемой версии. Текущий экземпляр теперь "
+"будет называться \"default\". Проверьте настройки веб-сервера, см. README."
+"Debian."
+
+#. Type: string
+#. Description
+#: ../templates:2001
+msgid "Redmine instances to be deconfigured:"
+msgstr "Удаление настроек следующих экземпляров redmine:"
+
+#. Type: string
+#. Description
+#: ../templates:2001
+msgid "Configuration files for these instances will be removed."
+msgstr "Файлы настройки этих экземпляров будут удалены."
+
+#. Type: string
+#. Description
+#: ../templates:2001
+msgid "Database (de)configuration will be asked accordingly."
+msgstr "Про соответствующие базы данных настроек также будет задан вопрос."
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid "Redmine instances to be configured or upgraded:"
+msgstr "Экземпляры redmine для настройки или обновления:"
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid "Space-separated list of instances identifiers."
+msgstr "Список идентификаторов экземпляров через пробел."
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid ""
+"Each instance has its configuration files in /etc/redmine/<instance-"
+"identifier>/"
+msgstr ""
+"Каждый экземпляр имеет свои файлы настройки в /etc/redmine/<идентификатор-"
+"экземпляра>/"
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid "To deconfigure an instance, remove its identifier from this list."
+msgstr ""
+"Чтобы удалить настройки экземпляра, удалите его идентификатор из списка."
+
+#. Type: select
+#. Description
+#: ../templates:4001
+msgid "Default redmine language:"
+msgstr "Язык по умолчанию в redmine:"
+
+#. Type: error
+#. Description
+#: ../templates:5001
+msgid "redmine-${dbtype} package required"
+msgstr "Требуется пакет redmine-${dbtype}"
+
+#. Type: error
+#. Description
+#: ../templates:5001
+msgid ""
+"Redmine instance ${instance} is configured to use database type ${dbtype}, "
+"but the corresponding redmine-${dbtype} package is not installed."
+msgstr ""
+"В экземпляре Redmine ${instance} указано использовать базу данных ${dbtype}, "
+"но соответствующий пакет redmine-${dbtype} не установлен."
+
+#. Type: error
+#. Description
+#: ../templates:5001
+msgid "Configuration of instance ${instance} is aborted."
+msgstr "Настройка экземпляра ${instance} прекращена."
+
+#. Type: error
+#. Description
+#: ../templates:5001
+msgid ""
+"To finish that configuration, please install the redmine-${dbtype} package, "
+"and reconfigure redmine using:"
+msgstr ""
+"Для завершения настройки, установите пакет redmine-${dbtype}, и повторите "
+"настройку с помощью:"

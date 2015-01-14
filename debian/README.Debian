@@ -1,0 +1,127 @@
+redmine for Debian
+==================
+
+SUPPORTS SETUP AND UPGRADES OF MULTIPLE DATABASE INSTANCES
+----------------------------------------------------------
+
+This redmine package is designed to automatically configure database
+BUT NOT the web server.
+The default database instance is called "default".
+A debconf facility is provided for configuring several redmine
+instances. Use dpkg-reconfigure to define the instances identifiers.
+NOTICE : every rake command has to know which instance it applies to.
+TO SELECT THE INSTANCE, USE
+X_DEBIAN_SITEID=<instancename>
+BEFORE ANY RAKE TASK.
+ 
+Example : (run the imap mail receiver)
+    sudo -u www-data X_DEBIAN_SITEID=default RAILS_ENV=production \
+    rake -f /usr/share/redmine/Rakefile \
+    redmine:email:receive_imap \
+    host=imap.test.com \
+    username=test@test.com password=xxxxxx
+
+
+REDMINE GUIDE
+-------------
+
+http://www.redmine.org/wiki/redmine/Guide
+
+
+REMEMBER TO CHANGE THE DEFAULT ADMIN PASSWORD
+---------------------------------------------
+
+By default, redmine admin account log/pass is admin/admin
+
+
+MANUAL WEB SERVER CONFIGURATION
+-------------------------------
+
+There are several ways to serve a rails app like redmine.  Some examples for
+configuration with passenger, or with a fastcgi web server, are available in
+/usr/share/doc/redmine/examples.
+
+The recommened way is to run redmine with the Passenger apache module. For
+that, libapache2-mod-passenger must be installed and the passenger apache2
+module must be enabled. See the apache2-passenger-*.conf examples.
+
+To run redmine with a fastcgi web server, ruby-fcgi package must be installed.
+Also note that libapache2-mod-fcgid package provides fastcgi support for
+apache2.
+
+In the provided examples, the environment variable must be set to the desired
+instance name :
+X_DEBIAN_SITEID=<instancename>
+By default, 
+X_DEBIAN_SITEID=default 
+
+
+QUICK LAUNCH USING WEBRICK
+--------------------------
+
+To test redmine without installing a web server, run as root :
+
+    cd /usr/share/redmine/
+    mkdir tmp log
+    chown www-data:www-data tmp log
+    sudo -u www-data X_DEBIAN_SITEID="default" rackup -E production
+
+and point your browser to http://localhost:9292
+When done, remove /usr/share/redmine/tmp
+
+NOTICE :
+
+* Running without sudoing to www-data will change permissions on some files, e.g.
+/var/log/redmine files. Fix it or reinstall the redmine package if you did so.
+* The tmp/ directory is needed when launching webrick, although nothing but empty directories
+will be created in it.
+
+
+OWNERS AND PERMISSIONS
+----------------------
+
+It is assumed ruby will run redmine as www-data:www-data.
+Accordingly, these files are owned by root:www-data and have 640 permissions :
+
+    /etc/redmine/<instancename>/session.yml
+    /etc/redmine/<instancename>/database.yml
+    /etc/redmine/<instancename>/configuration.yml
+
+These folders are owned by www-data:www-data and have 750 permissions :
+
+    /var/log/redmine/*
+    /var/lib/redmine/*
+    /var/cache/redmine/*
+
+Relaxing those permissions is discouraged. Please think twice before doing so.
+If one really need to run redmine as another user, please read what follows.
+
+
+MANUAL EMAIL CONFIGURATION
+--------------------------
+
+Email settings are not automatically configured, for a quick setup :
+    cp /usr/share/doc/redmine/examples/configuration.yml /etc/redmine/<instancename>/configuration.yml
+and edit the file.
+
+Then change permissions and owner :
+    chmod 640 /etc/redmine/<instancename>/configuration.yml
+    chown root:www-data /etc/redmine/<instancename>/configuration.yml
+
+then restart redmine and check if it's working by sending a test email in
+Administration panel -> Settings -> Email notifications -> Send a test email
+or refer to the Redmine Guide.
+
+
+WARNING : delivery_method: :async_smtp
+--------------------------------------
+
+It has been reported [0] that this method does not work when used by a rake task (e.g.
+in a crontab). Simply use :smtp method in that case.
+
+[0]
+http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=570402
+
+
+
+ -- Ondřej Surý <ondrej@debian.org>, Tue, 31 May 2011 09:30:21 +0200

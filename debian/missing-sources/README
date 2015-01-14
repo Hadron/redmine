@@ -1,0 +1,6 @@
+The sources for jstoolbar-textile.min.js are actually composed of the
+jstoolbar.js, symlinked here as jstoolbar-textile.js, plus textile.js in the
+same directory as the original, i.e. public/javascripts/jstoolbar from the root
+of the source tree.
+
+ -- Antonio Terceiro <terceiro@debian.org>  Tue, 30 Sep 2014 18:40:42 -0300

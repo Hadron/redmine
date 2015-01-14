@@ -1,0 +1,11 @@
+Test-Command: debian/tests/smoke-test sqlite3
+Depends: redmine-sqlite, redmine, apache2, libapache2-mod-passenger, curl
+Restrictions: needs-root
+
+Test-Command: debian/tests/smoke-test postgresql
+Depends: postgresql, redmine-pgsql, redmine, apache2, libapache2-mod-passenger, curl
+Restrictions: needs-root
+
+Test-Command: debian/tests/smoke-test mysql2
+Depends: mysql-server, redmine-mysql, redmine, apache2, libapache2-mod-passenger, curl
+Restrictions: needs-root

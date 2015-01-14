@@ -1,0 +1,45 @@
+#!/bin/sh
+# prerm script for redmine
+#
+# see: dh_installdeb(1)
+
+set -e
+#set -x
+
+. /usr/share/debconf/confmodule
+
+case "$1" in
+	remove)
+		db_get redmine/old-instances || true
+		gOldInstances="${RET}"
+		for lInstance in $gOldInstances; do
+			db_get redmine/instances/$lInstance/dbconfig-install || true
+			if [ "$RET" = "true" ]; then
+				( . /usr/share/dbconfig-common/dpkg/prerm ; dbc_go redmine/instances/$lInstance $@ )
+			fi
+		done
+		
+		db_get redmine/current-instances || true
+		gInstances="${RET}"
+		for lInstance in $gInstances; do
+			db_get redmine/instances/$lInstance/dbconfig-install || true
+			if [ "$RET" = "true" ]; then
+				( . /usr/share/dbconfig-common/dpkg/prerm ; dbc_go redmine/instances/$lInstance $@ )
+			fi
+		done
+		
+		
+		# removes symbolic links installed by
+		vendordir="/usr/share/redmine/vendor/"
+		rm -f ${vendordir}rails
+	;;
+	
+	purge|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+	;;
+esac
+
+#DEBHELPER#
+
+exit 0
+
+

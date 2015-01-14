@@ -1,0 +1,810 @@
+redmine (3.0~20150111-1) unstable; urgency=medium
+
+  * Update to current sources.
+
+ -- Klee Dienes <klee@debian.org>  Wed, 14 Jan 2015 09:45:30 -0500
+
+redmine (3.0~20140825-3) unstable; urgency=medium
+
+  * debian/patches/avoid-crash-on-issues.diff: apply upstream patch to avoid
+    crashes in some issue management configurations (Closes: #771849)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Thu, 04 Dec 2014 09:41:50 -0200
+
+redmine (3.0~20140825-2) unstable; urgency=medium
+
+  * README.Debian: update instructions to run redmine without a webserver
+    (Closes: #765498)
+  * Make Gemfile.lock a symlink to /dev/null, so that bundler will not
+    abort on upgrades of minor versions (Closes: #767548)
+  * debian/redmine.triggers: reconfigure package whenever a plugin is
+    installed; so plugins database setup scripts are automatically applied
+    when they are installed.
+  * debian/patches/drop-update_all.patch: apply upstream patch to fix upgrades
+    from wheezy (Closes: #765466)
+  * debian/patches/invalidate-language-cache-from-older-versions.diff: avoid
+    using cached language list created by earlier versions, which is in a
+    incompatible data structure (Closes: #764230)
+  * Added Italian translation for Debconf prompts, thanks to Beatrice Torracca
+    (Closes: #768575)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sun, 30 Nov 2014 21:20:40 -0200
+
+redmine (3.0~20140825-1) unstable; urgency=medium
+
+  * New upstream snapshot
+    .
+    New dependencies:
+      + bundler
+      + ruby-actionpack-action-caching
+      + ruby-jquery-rails,
+      + ruby-mime-types
+      + ruby-protected-attributes
+      + ruby-redcarpet
+      + ruby-request-store
+      + ruby-rmagick
+    Changed dependencies:
+      + ruby-railties-3.2 → ruby-rails (>= 2:4)
+    Add Conflicts:
+      + ruby-activesupport-2.3, ruby-activesupport-3.2 to ease apt into
+        upgrading from wheezy
+    Works with ruby-awesome-nested-set 3.0 (Closes: #762283)
+  * Drop debian/patches/2019_unplug_bundler.patch: bundler is too much
+    intricated into Rails nowadays for us to be able to run without it.
+  * debian/rules: stop messing with the Gemfile
+  * debian/patches/gemfile-adjustments.patch: make adjustments to version
+    expectations; some of them are too strict
+  * Add smoke test as autopkgtest test suite.
+  * redmine-mysql: use ruby-mysql2 instead of ruby-mysql
+  * Updated documentation:
+    - running as unprivileged user sharing the system-wide install is not
+      really supported anymore. Added a note in NEWS.
+    - updated apache2-passenger setup instructions
+
+ -- Antonio Terceiro <terceiro@debian.org>  Tue, 30 Sep 2014 18:40:42 -0300
+
+redmine (2.5.2-1) unstable; urgency=medium
+
+  * New upstream version 2.5.2
+  * Mangle installed Gemfile from d/rules instead of patching
+
+ -- Ondřej Surý <ondrej@debian.org>  Wed, 16 Jul 2014 13:00:30 +0200
+
+redmine (2.5.1-2) unstable; urgency=medium
+
+  * New redmine needs awesome_nested_set gem
+  * Load awesome_nested_set in initializers
+
+ -- Ondřej Surý <ondrej@debian.org>  Tue, 29 Apr 2014 11:48:47 +0200
+
+redmine (2.5.1-1) unstable; urgency=medium
+
+  * Add ruby-i18n (>= 0.6.9-1~) dependency to unbreak upgrades in backports
+  * New upstream version 2.5.1 (Closes: #743828)
+  * Refresh patches for 2.5.1 release
+
+ -- Ondřej Surý <ondrej@debian.org>  Tue, 29 Apr 2014 09:38:26 +0200
+
+redmine (2.4.2-1) unstable; urgency=low
+
+  * New upstream version 2.4.2
+  * Update patches for 2.4.2 release
+
+ -- Ondřej Surý <ondrej@debian.org>  Tue, 28 Jan 2014 11:25:00 +0100
+
+redmine (2.4.1-1) unstable; urgency=low
+
+  * New upstream version 2.4.1
+  * Refresh patches for 2.4.1 release
+
+ -- Ondřej Surý <ondrej@debian.org>  Tue, 03 Dec 2013 12:04:41 +0100
+
+redmine (2.3.3-3.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Tighten redmine-mysql dependencies to ruby-mysql, as ruby-mysql2
+    exposes another interface and does not work OOTB with the current
+    postinst. (Closes: #728243)
+
+ -- Christian Hofstaedtler <zeha@debian.org>  Tue, 31 Dec 2013 00:05:41 +0100
+
+redmine (2.3.3-3) unstable; urgency=low
+
+  * Drop unused rubygems build-dependency.
+  * Add ruby-rack1.4 as alternative. Closes: #731177.
+  * Remove dependency on ruby-fastercsv, this is part of the ruby1.8
+    removal.
+
+ -- Jérémy Lal <kapouer@melix.org>  Mon, 02 Dec 2013 23:47:41 +0100
+
+redmine (2.3.3-2) unstable; urgency=low
+
+  * Add Gemfile patch back to allow backporting redmine
+  * Unplug bundler in the plugins as well
+
+ -- Ondřej Surý <ondrej@debian.org>  Thu, 24 Oct 2013 08:55:43 +0200
+
+redmine (2.3.3-1) unstable; urgency=low
+
+  * Imported Upstream version 2.3.3
+  * Bundler is a development tool, it is not needed at runtime:
+    + remove (build-)dependency on it
+    + add 2019 patch to remove calls to it
+    + depend only on ruby-railties, not rails nor ruby-rails-3.2
+    + do not build nor install Gemfile.lock
+  * Refresh patches, unapply changeset_r11680.diff, applied upstream
+  * Remove ruby-openid from Suggests, it is already in Depends
+  * Depends on ruby-rails-observers to ensure observers are loaded
+  * Depends on libjs-scriptaculous (Closes: #702303)
+  * Standards-Version 3.9.4
+  * redmine-(pgsql|sqlite|mysql) packages recommend redmine, avoids
+    circular dependency (Closes: #709801) and match long description.
+  * Breaks plugins installed in vendor/plugins (Closes: #712715):
+    + redmine-plugin-botsfilter <= 1.02-2
+    + redmine-plugin-recaptcha <=0.1.0+git20121018
+  * README.Debian: update webrick example (Closes: #709990)
+
+ -- Jérémy Lal <kapouer@melix.org>  Sat, 28 Sep 2013 13:28:10 +0200
+
+redmine (2.3.1-1) unstable; urgency=low
+
+  * Imported Upstream version 2.3.1
+  * Upload to unstable.
+
+ -- Ondřej Surý <ondrej@debian.org>  Thu, 23 May 2013 10:44:29 +0200
+
+redmine (2.3.0+dfsg1-6) experimental; urgency=low
+
+  * Finish replacing RAILS_CACHE with RAILS_TMP (Closes: #704039)
+
+ -- Ondřej Surý <ondrej@debian.org>  Wed, 27 Mar 2013 12:26:28 +0100
+
+redmine (2.3.0+dfsg1-5) experimental; urgency=low
+
+  * Import upstream fix to log SCM stderr when log level is set to debug
+    only.
+
+ -- Ondřej Surý <ondrej@debian.org>  Fri, 22 Mar 2013 11:36:05 +0100
+
+redmine (2.3.0+dfsg1-4) experimental; urgency=low
+
+  * Fix missing then in the cache clear part of postinst script and don't
+    remove the cache directory, just the contents.
+
+ -- Ondřej Surý <ondrej@debian.org>  Thu, 21 Mar 2013 17:14:30 +0100
+
+redmine (2.3.0+dfsg1-3) experimental; urgency=low
+
+  * Put scm.stderr.log into correct directory, this will reenable scm
+    commands again.
+  * Remove patch reverting caching of I18N, we just need to ensure that
+    /var/cache/redmine is cleared properly
+  * Move cache directory under cache/ subdirectory, so the rake task
+    works.
+  * Depend on ruby-railties-3.2 (>= 3.2.13-2~), so the rake
+    tmp:cache:clear command works.
+
+ -- Ondřej Surý <ondrej@debian.org>  Thu, 21 Mar 2013 14:17:34 +0100
+
+redmine (2.3.0+dfsg1-2) experimental; urgency=low
+
+  * Add patch which reverts I18N caching and fix Redmine issue #13520
+
+ -- Ondřej Surý <ondrej@debian.org>  Wed, 20 Mar 2013 15:00:24 +0100
+
+redmine (2.3.0+dfsg1-1) experimental; urgency=low
+
+  * Imported Upstream version 2.3.0+dfsg1
+  * Update patches for 2.3.0 release
+  * Update dependencies for redmine 2.3.0, add ruby-mysql2 as optional mysql library
+
+ -- Ondřej Surý <ondrej@debian.org>  Wed, 20 Mar 2013 12:40:16 +0100
+
+redmine (2.2.3+dfsg1-1) experimental; urgency=low
+
+  * Imported Upstream version 2.2.3+dfsg1
+  * Update patches to 3.2.12 release
+
+ -- Ondřej Surý <ondrej@debian.org>  Wed, 13 Feb 2013 09:06:27 +0100
+
+redmine (2.2.2+dfsg1-1) experimental; urgency=low
+
+  * Imported Upstream version 2.2.2+dfsg1
+
+ -- Ondřej Surý <ondrej@debian.org>  Tue, 22 Jan 2013 11:37:49 +0100
+
+redmine (2.2.1+dfsg1-1) experimental; urgency=low
+
+  * Imported Upstream version 2.2.1+dfsg1
+  * Update patches to 2.2.1
+  * Force to use rails 3.2.11 which contain critical security update
+
+ -- Ondřej Surý <ondrej@debian.org>  Tue, 15 Jan 2013 14:50:28 +0100
+
+redmine (2.2.0+dfsg1-1) experimental; urgency=low
+
+  * Imported Upstream version 2.2.0+dfsg1
+  * Refresh patches for 2.2.0 release
+  * Rework the logic of replacing session tokens to trigger when the file
+    doesn't exist or we are upgrading from previous version
+
+ -- Ondřej Surý <ondrej@debian.org>  Thu, 03 Jan 2013 12:46:35 +0100
+
+redmine (2.1.4+dfsg2-2) experimental; urgency=low
+
+  * Regenerate session.yml on upgrades to fix the Class incompatibility
+    breakage in Rails 2.3->3.2 migration.
+  * Purge session.yml from ucf database before replacing it
+
+ -- Ondřej Surý <ondrej@debian.org>  Wed, 12 Dec 2012 15:13:17 +0100
+
+redmine (2.1.4+dfsg2-1) experimental; urgency=low
+
+  * Update gbp.conf to filter-out lib/plugins instead of vendor/plugins
+  * Update NEWS to match the news upstream version
+  * Add myself to Uploaders
+
+ -- Ondřej Surý <ondrej@debian.org>  Tue, 11 Dec 2012 11:42:38 +0100
+
+redmine (2.1.4+dfsg1-1) experimental; urgency=low
+
+  [ Ondřej Surý ]
+  * Imported Upstream version 2.1.4
+  * Update plugins directory from vendor/plugins to lib/plugins
+  * debian/control:
+    + Update depedencies for redmine (mainly switch from Rails 2.3 to
+      Rails 3.2)
+    + Add rubygems to Build-Depends
+    + Adds Conflict with ruby-passenger << 3, because redmine is not
+      compatible with version 2
+    + Add dependency on redmine (= ${source:Version}) for all database
+      packages, so they are upgraded together.
+    + Bump ruby-mysql dependency to >= 2.8.1 per Gemfile
+  * debian/patches/*:
+    + Update (and refresh) patches to Redmine 2.1.x
+    + In ActiveRecord 3.2, MysqlAdapter extends AbstractMysqlAdapter, not
+      AbstractAdapter (Courtesy of Adrian Wilkins)
+    + Load session.yml only if the file exists
+    + Update Gemfile-comment-all-gems patch for 2.1.4 release
+  * debian/postinst:
+    + The rake task generate_session_store has been deprecated, using
+      the generate_secret_token in postinst instead.
+    + The rake task db:migrate_plugins has been deprecated, using the
+      replacement version redmine:plugins:migrate instead
+
+  [ Jérémy Lal ]
+  * debian/control:
+    + Recommends: libfcgi-ruby1.9.1 | libfcgi-ruby,
+      it is needed when using fastcgi with ruby1.9.
+    + Recommends: ruby-passenger.
+    + Depends on ruby-{pg,mysql,sqlite3} instead of libxxx-ruby packages.
+  * debian/postinst: use exit 1 instead of illegal negative value.
+    (Closes: #687449)
+
+ -- Ondřej Surý <ondrej@debian.org>  Mon, 10 Dec 2012 12:33:19 +0100
+
+redmine (1.4.4+dfsg1-3) unstable; urgency=low
+
+  [ Jérémy Lal ]
+  * This release is a candidate for proposed-updates.
+    Changes have been kept to the minimum.
+
+  [ Ondřej Surý ]
+  * Pull upstream fixes for Ruby 1.9 as default interpreter:
+    + Replace missing ParseDate with DateTime (Closes: #700754)
+    + Fix broken REST API (Closes: #700009)
+
+ -- Jérémy Lal <kapouer@melix.org>  Sat, 11 May 2013 16:26:27 +0200
+
+redmine (1.4.4+dfsg1-2) unstable; urgency=low
+
+  * Manage and set dbuser default value like dbname. (Closes: #695774)
+
+ -- Jérémy Lal <kapouer@melix.org>  Sat, 19 Jan 2013 15:54:02 +0100
+
+redmine (1.4.4+dfsg1-1.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * debian/control: add dependency on rubygems or recent enough ruby
+    (Closes: #693994) [Axel Beckert].
+  * debian/postinst: replace exit status -1 with 2 for shell compatibility
+    (e.g. ksh) (Closes: #687449).
+
+ -- Dominik George <nik@naturalnet.de>  Sun, 29 Nov 2012 14:18:29 +0200
+
+redmine (1.4.4+dfsg1-1) unstable; urgency=low
+
+  * Upstream update.
+  * debian/patches: trivial refresh.
+  * debian/copyright: remove unused GPL section.
+
+ -- Jérémy Lal <kapouer@melix.org>  Mon, 18 Jun 2012 23:26:07 +0200
+
+redmine (1.4.3+dfsg1-1) unstable; urgency=low
+
+  * Upstream update.
+  * debian/patches: trivial refresh.
+
+ -- Jérémy Lal <kapouer@melix.org>  Wed, 06 Jun 2012 00:11:33 +0200
+
+redmine (1.4.2+dfsg1-1) unstable; urgency=low
+
+  * Upstream update.
+    Gem dependencies are managed by bundler, thus were removed from tarball.
+  * debian/control:
+    + depends on ruby | ruby-interpreter, as redmine is compatible with
+      ruby1.8 and ruby1.9.
+    + depends on ruby-net-ldap >= 0.3.1.
+    + depends on ruby-fastercsv.
+    + depends on ruby-openid instead of libopenid-ruby.
+    + build-depends and depends on bundler.
+  * debian/rules: do a bundler --local install, without any actual gem.
+  * debian/copyright:
+    + remove rails, ruby-net-ldap, rubytree, coderay dependencies.
+    + remove lib/faster_csv.rb, now a dependency.
+    + extend year to 2012.
+  * debian/patches: 
+    + remove 2001_fix_shebang_interpreter.patch, unbundled file.
+    + remove 2014_relax_RAILS_GEM_VERSION.patch, moved to Gemfile.
+    + remove 2015_use_system_coderay.patch, moved to Gemfile.
+    + trivial refresh on other patches.
+    + remove 2016_fix_openid_login_7857_and_8473.patch, not needed
+      since rails 2.3.14, necessity unclear.
+    + 2017_Gemfile_debian.patch, prevents bundler from installing gems.
+  * debian/README.source: update how to run tests.
+
+ -- Jérémy Lal <kapouer@melix.org>  Sun, 20 May 2012 16:43:11 +0200
+
+redmine (1.3.3+dfsg1-2) unstable; urgency=low
+
+  * Depends on coderay >= 1.0.5. (Closes: #669153)
+  * Drop unneeded Suggests: libsvn-ruby.
+  * Suggests: bzr, cvs, darcs, git, mercurial, subversion.
+    Redmine directly calls SCM binary and doesn't use any ruby bindings.
+
+ -- Jérémy Lal <kapouer@melix.org>  Sun, 22 Apr 2012 12:28:24 +0200
+
+redmine (1.3.3+dfsg1-1) unstable; urgency=low
+
+  * Upstream update. 
+
+ -- Jérémy Lal <kapouer@melix.org>  Sat, 14 Apr 2012 18:34:03 +0200
+
+redmine (1.3.2+dfsg1-1) unstable; urgency=low
+
+  * Upstream update.
+  * Standards-Version 3.9.3.
+  * Explicit dependency on ruby-rake >= 1.4.0.
+  * debian/patches:
+    + 1014_logout_cookie_rake.patch disabled, fixed by ruby-rake >= 1.4.0.
+    + 1015_update_rubytree_specification.patch, applied upstream.
+
+ -- Jérémy Lal <kapouer@melix.org>  Tue, 13 Mar 2012 11:09:31 +0100
+
+redmine (1.3.1+dfsg1-1) unstable; urgency=low
+
+  * Upstream update.
+  * Adds 'ar' language to debian/config list.
+  * Update nl (Dutch)  translation. (Closes: #659247)
+    Thanks to Jeroen Schot.
+
+ -- Jérémy Lal <kapouer@melix.org>  Sat, 11 Feb 2012 16:50:07 +0100
+
+redmine (1.3.0+dfsg1-2) unstable; urgency=low
+
+  [ Jérémy Lal ]
+  * debian/patches/2002_FHS_through_env_vars.patch:
+    Output pdf in RAILS_CACHE, not in Rails.root/tmp.
+    (Closes: #656329)
+
+  [ Paul van Tilburg ]
+  * debian/watch: fixed a small error in the dversionmangle pattern.
+
+ -- Jérémy Lal <kapouer@melix.org>  Thu, 19 Jan 2012 22:54:28 +0100
+
+redmine (1.3.0+dfsg1-1) unstable; urgency=low
+
+  * New upstream release.
+  * Require rails >= 2.3.14
+  * New pt_BR.po file for debian. (Closes:#652881)
+  * Update debian/copyright (raphael.js, coderay 0.9.7 to 1.0.0).
+  * Refresh patches :
+    + RAILS_ROOT is now Rails.root
+    + Remove unused or applied upstream patches.
+
+ -- Jérémy Lal <kapouer@melix.org>  Mon, 26 Dec 2011 17:49:51 +0100
+
+redmine (1.2.2+dfsg1-1) unstable; urgency=low
+
+  * New upstream release. 
+
+ -- Jérémy Lal <kapouer@melix.org>  Sun, 13 Nov 2011 09:18:17 +0100
+
+redmine (1.2.1+dfsg2-3) unstable; urgency=low
+
+  * Fix vendor/gems/rubytree-0.5.2/.specification file, which was
+    not recognized by rubygems >= 1.8.10. (Closes: #645139)
+
+ -- Jérémy Lal <kapouer@melix.org>  Sun, 23 Oct 2011 13:21:18 +0200
+
+redmine (1.2.1+dfsg2-2) unstable; urgency=low
+
+  [ Jérémy Lal ]
+  * Require rails >= 2.3.11. (Closes: #642382)
+  * Upload to unstable. (Closes: #645139)
+
+  [ Ondřej Surý ]
+  * Fix NoMethodError and OpenID authentication errors.
+    + http://www.redmine.org/issues/7857
+    + http://www.redmine.org/issues/8473
+
+ -- Jérémy Lal <kapouer@melix.org>  Thu, 13 Oct 2011 01:31:53 +0200
+
+redmine (1.2.1+dfsg2-1) experimental; urgency=low
+
+  [ Jérémy Lal ]
+  * DFSG vendor/plugins/rfpdf/lib/fonts except makefontuni_ruby.php
+  * Use ttf2ufm and makefontuni_ruby.php to build the rfpdf fonts files
+    from ttf-freefont and ttf-dejavu packages.
+  * Update debian/copyright
+  * Depends on ruby-coderay package instead of installing bundled gem.
+  * Recommends ruby-net-ldap package instead of installing bundled one.
+    (Closes: #628710)
+
+  [ Ondřej Surý ]
+  * Imported Upstream version 1.2.1
+  * Add patch to prefix subtasks in generated PDF
+    (http://www.redmine.org/issues/8617)
+
+ -- Jérémy Lal <kapouer@melix.org>  Fri, 26 Aug 2011 15:01:22 +0200
+
+redmine (1.2.0-1) UNRELEASED; urgency=low
+
+  [ Ondřej Surý ]
+  * Push redmine-1.2.0 to experimental
+  * Imported Upstream version 1.2.0
+    (Closes: #629608)
+  * Updated patches to 1.2.0 release
+  * Update scripts and documentation:
+    + email.yml was renamed to configuration.yml
+    + rfpdf/lib/rfpdf/ was changed to rfpdf/lib/fpdf/
+
+  [ Jérémy Lal ]
+  * Add new locale fa (Persian) in debian config
+  * email.yml renamed to configuration.yml : ucf purge accordingly.
+
+ -- Jérémy Lal <kapouer@melix.org>  Sat, 02 Jul 2011 16:51:40 +0200
+
+redmine (1.1.3-4) unstable; urgency=low
+
+  * rack 1.3.1 does not support symbols as keys in cookie hash.
+    (Closes: #637486) 
+
+ -- Jérémy Lal <kapouer@melix.org>  Thu, 01 Sep 2011 21:53:43 +0200
+
+redmine (1.1.3-3) unstable; urgency=low
+
+  [ Jérémy Lal ]
+  * rack 1.3.1 does not support calling cookies.delete on a symbol.
+    (Closes: #637486).
+  * vendor/rails now links to /usr/lib/ruby/vendor_ruby/rails,
+    only if it exists, preserving older rails compatibility.
+    (Closes: #635456).
+  * backport r5134 to fix "Add a relation between issues"
+    (Closes: #639190)
+
+  [ Ondřej Surý ]
+  * Alternatively depend on rails to allow easy backports
+
+ -- Jérémy Lal <kapouer@melix.org>  Wed, 24 Aug 2011 22:59:58 +0200
+
+redmine (1.1.3-2) unstable; urgency=low
+
+  * Do not setup /var/run/redmine in postinst, /run is tmpfs.
+    Propose other paths:/var/run/lighttpd, /tmp.
+    (Closes: #631058).
+  * Depends on renamed packages ruby-rails-2.3, ruby-rmagick.
+  * Depends on ruby1.8 only. Fix shebangs.
+  * Output a message and exit postinst with error if rake db:migrate fails
+    (Closes: #632178).
+
+ -- Jérémy Lal <kapouer@melix.org>  Sun, 24 Jul 2011 23:02:50 +0200
+
+redmine (1.1.3-1) unstable; urgency=low
+
+  * New upstream release (Closes: #628180, #628181, #625270)
+  * Move VCS to git.debian.org
+  * Standards-Version 3.9.2
+  * Depends on rails >= 2.3.11, remove unneeded patches:
+    + debian/patches/2011_rubygems_need_thread.patch
+    + debian/patches/2010_use_i18n_0.4.1.patch (part of)
+    + debian/patches/2007_disable_deprecation_warnings.patch
+    + debian/patches/2012_rubygems_version_requirement.patch
+
+ -- Jérémy Lal <kapouer@melix.org>  Mon, 30 May 2011 19:45:53 +0200
+
+redmine (1.1.2-2) unstable; urgency=low
+
+  * Upload to unstable. (Closes: #620911)
+
+ -- Jérémy Lal <kapouer@melix.org>  Tue, 05 Apr 2011 04:06:22 +0200
+
+redmine (1.1.2-1) experimental; urgency=low
+
+  * New upstream release
+  * Update and convert debian/copyright to dep5 format.
+  * Work around rubygems bug #587767.
+  * Add version_requirement method support for compatibility with
+    rubygems >= 1.5.0.
+
+ -- Jérémy Lal <kapouer@melix.org>  Tue, 22 Mar 2011 01:16:28 +0100
+
+redmine (1.1.0-1) experimental; urgency=low
+
+  * New upstream release.
+  * All patches follow DEP-3 format. 
+
+ -- Jérémy Lal <kapouer@melix.org>  Wed, 26 Jan 2011 11:26:59 +0100
+
+redmine (1.0.5-1) unstable; urgency=low
+
+  * New upstream release
+  * i18n patch needed because redmine 1.0.5 depend on libi18n-ruby 0.4.2.
+
+ -- Jérémy Lal <kapouer@melix.org>  Fri, 24 Dec 2010 17:51:03 +0100
+
+redmine (1.0.4-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Jérémy Lal <kapouer@melix.org>  Sun, 28 Nov 2010 19:38:34 +0100
+
+redmine (1.0.3-1) unstable; urgency=low
+
+  * New upstream release.
+  * Support for variable 'x_debian_siteid' in thin config file,
+    and provide yml example.
+  * Update the list of supported locales for loading default data,
+    upstream added support for : en-GB, eu, lv, mk, mn, sr-YU.
+    (Closes: #566859)
+  * Remove "disable autologin" patch, applied upstream.
+
+ -- Jérémy Lal <kapouer@melix.org>  Wed, 03 Nov 2010 12:33:52 +0100
+
+redmine (1.0.2-4) unstable; urgency=low
+
+  * Fix wrong dependencies on libdbd-*-ruby packages,
+    only lib(mysql|pgsql|sqlite3)-ruby are needed.
+  * Make "disable autologin" really work. From upstream patch
+    http://www.redmine.org/issues/6438
+  * Some patches were missing a description.
+
+ -- Jérémy Lal <kapouer@melix.org>  Mon, 18 Oct 2010 01:14:19 +0200
+
+redmine (1.0.2-3) unstable; urgency=low
+
+  * Disable GEM deprecation more carefully. (Closes: #599943)
+  * Remove i18n deprecation message.
+
+ -- Jérémy Lal <kapouer@melix.org>  Fri, 15 Oct 2010 21:50:28 +0200
+
+redmine (1.0.2-2) unstable; urgency=low
+
+  * Update vi translation. (Closes: #598605)
+  * Hint dbconfig-common so it creates mysql or pgsql databases
+    using UTF8 encoding, when that feature will be available.
+  * Patch ActiveRecord's MySql adapter so tables are created with
+    DEFAULT ENCODING = the one given in database.yml.
+    (Closes: #597652)
+  * Silence gem deprecation warnings in production env. (Closes: #599943)
+
+ -- Jérémy Lal <kapouer@melix.org>  Fri, 15 Oct 2010 00:56:33 +0200
+
+redmine (1.0.2-1) unstable; urgency=low
+
+  * New upstream release: better stability, and translations
+    updates. See http://www.redmine.org/versions/show/24
+  * Reformat README.Debian to make it easier to read, mention that running
+    with webrick needs a log dir. (Closes: #597649)
+  * Remove patch for libi18n-ruby 0.4.1 support, applied upstream.
+    Silent deprecation warnings in production env.
+  * Update es translation. (Closes: #594853)
+  * Improve apache2-passenger-host.conf example.
+
+ -- Jérémy Lal <kapouer@melix.org>  Mon, 27 Sep 2010 02:17:00 +0200
+
+redmine (1.0.1-1) unstable; urgency=low
+
+  * Upstream update, fixes many 1.0.0 RC bugs, see :
+    http://www.redmine.org/versions/show/21
+  * Patch for libi18n-ruby 0.4.1 support. (Closes: #592672)
+  * Postinst note should be an error. (Closes: #591220)
+  * Update translations. (Closes: #591072, #591219, #591235, #591268,
+    #591308, #591689, #591716, #592371)
+  * Fix /usr/share/doc/redmine/examples/apache2-* to work with
+    libapache2-mod-fcgid >= 2.3.5 (LP: #620392)
+  * Rephrase web server configuration section in README.Debian (LP: #620412)
+
+ -- Jérémy Lal <kapouer@melix.org>  Sun, 01 Aug 2010 15:41:26 +0200
+
+redmine (1.0.0-4) unstable; urgency=low
+
+  * If package redmine-<dbtype> is not installed, display a postinst
+    debconf note and do not configure that db instance. (Closes: #590695)
+  * Migration from rails 2.2 links : check if link exists with -L, not -e. 
+  * Add cs translation. (Closes: #589951)
+  * Display correct path for email.yml configuration. (Closes: #590846)
+  * Fix multiple db config by executing dbconfig scripts in a subshell.
+
+ -- Jérémy Lal <kapouer@melix.org>  Fri, 30 Jul 2010 15:12:38 +0200
+
+redmine (1.0.0-3) unstable; urgency=low
+
+  * Ensure vendor/rails link is created.
+
+ -- Jérémy Lal <kapouer@melix.org>  Tue, 20 Jul 2010 23:22:42 +0200
+
+redmine (1.0.0-2) unstable; urgency=low
+
+  * Fix detection of rails 2.2 links. (Closes: #588583) 
+
+ -- Jérémy Lal <kapouer@melix.org>  Tue, 20 Jul 2010 16:00:17 +0200
+
+redmine (1.0.0-1) unstable; urgency=low
+
+  * New upstream release : upstream considers it is a Release
+    Canditate. Expect an update soon.
+  * Refreshed quilt patches
+  * Coderay plugin has been updated : update debian/rules and
+    patch one of its files to remove an unnecessary shebang.
+  * README.Debian : add more info about launching with webrick.
+    (Closes: #589033)
+
+ -- Jérémy Lal <kapouer@melix.org>  Sun, 18 Jul 2010 23:13:46 +0200
+
+redmine (0.9.6-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Jérémy Lal <kapouer@melix.org>  Fri, 09 Jul 2010 23:48:32 +0200
+
+redmine (0.9.5-1) unstable; urgency=low
+
+  * New upstream release
+  * Standards-Version 3.9.0, BSD license included in copyright file.
+  * uscan calls uupdate.
+
+ -- Jérémy Lal <kapouer@melix.org>  Tue, 29 Jun 2010 06:59:34 +0200
+
+redmine (0.9.4-4) unstable; urgency=low
+
+  * Let rails decide GC. (Closes: #585976) 
+
+ -- Jérémy Lal <kapouer@melix.org>  Fri, 18 Jun 2010 23:36:14 +0200
+
+redmine (0.9.4-3) unstable; urgency=low
+
+  * Depends on rails 2.3.5. (Closes: #583107, #583313)
+  * Clean up dependencies and recommandations.
+  * Overall improvement over previous rails 2.2.3 version, since
+    upstream supports redmine-0.9.4 / rails 2.3.5 combination.
+
+ -- Jérémy Lal <kapouer@melix.org>  Thu, 27 May 2010 02:44:42 +0200
+
+redmine (0.9.4-2) unstable; urgency=low
+
+  * ENV['RAILS_RELATIVE_URL_ROOT'] should never be empty.
+    (Closes: #581383)
+
+ -- Jérémy Lal <kapouer@melix.org>  Wed, 12 May 2010 17:25:00 +0200
+
+redmine (0.9.4-1) unstable; urgency=low
+
+  * New upstream release. 
+  * Migration from trac fix. (Closes: #576682)
+  * /usr/share/redmine/config/environment.rb owned by www-data:root,
+   so Passenger runs redmine as www-data instead of nobody.
+   (Closes: #575462)
+  * Use dh_installexamples instead of docs.
+  * Additionnal and tested examples for passenger, nginx, spawn-fcgi.
+  * Security fix : Escape revision on repository view.
+  * DM-Upload-Allowed: yes
+
+ -- Jérémy Lal <kapouer@melix.org>  Sun, 02 May 2010 13:58:12 +0200
+
+redmine (0.9.3-3) unstable; urgency=low
+
+  * Removes completely ineffective fcgi patch.
+  * Security fix : Escape href attribute in auto links.
+  * Security fix : Fixes permission check in QueriesController.
+
+ -- Jérémy Lal <kapouer@melix.org>  Thu, 25 Mar 2010 00:13:02 +0100
+
+redmine (0.9.3-2) unstable; urgency=low
+
+  * Rails 2.2 fix for mantis and trac migration tasks.
+  * Rails 2.2 fix for application_controller naming, allows
+    better compatibility with plugins.
+  * Rails 2.2 fix hanging fcgi processes when database connections
+    are left open : restarting spawn-fcgi is no more painful.
+  * fr.po update. (Closes: #575152)
+
+ -- Jérémy Lal <kapouer@melix.org>  Wed, 24 Mar 2010 12:28:13 +0100
+
+redmine (0.9.3-1) unstable; urgency=low
+
+  * First attempt to support plugins. Unfortunately, many of them
+    already depend on rails 2.3, so they'll need some patches.
+  * Load session.yml in config/environment.rb before loading plugins.
+    (Closes: #549453)
+  * Move public/plugin_assets to /var/cache/redmine/plugin_assets.
+    The server config must be fixed, examples are provided.
+    (Closes: #570308)
+  * Recommends libapache2-mod-passenger and provide some example for
+    its configuration. (Closes: #570184)
+  * Update email.yml example, document in README.Debian a bug with
+    delivery method async_smtp. (Closes: #570402)
+
+ -- Jérémy Lal <kapouer@melix.org>  Sun, 28 Feb 2010 19:32:55 +0100
+
+redmine (0.9.2-2) unstable; urgency=low
+
+  * Switch to dpkg-source 3.0 (quilt) format.
+  * Drop get-orig-source, use uscan only, add copyright for rails
+  * Fix forms select helper, another rails 2.2 incompatibility.
+    (Closes: #569080)
+  * Correctly declare generate_session_store task. (Closes: #569555)
+  * Monkey patch to allow XHR requests in rails 2.2.3-2.
+
+ -- Jérémy Lal <kapouer@melix.org>  Sun, 14 Feb 2010 15:58:08 +0100
+
+redmine (0.9.2-1) unstable; urgency=low
+
+  * Upstream update
+  * Adds id language to debian/config list.
+  * Correct apache2 host example config. (Closes: #568859)
+  * Migrate databases and plugins even when not reinstalled
+    by dbconfig. (Closes: #568861)
+
+ -- Jérémy Lal <kapouer@melix.org>  Mon, 08 Feb 2010 14:08:42 +0100
+
+redmine (0.9.1-1) unstable; urgency=low
+
+  * Stop using deprecated dbfile param in database.yml.
+  * Use session.yml to store secret session key.
+  * Supports and documents running as unprivileged user. (Closes: #564086)
+  * Split debian/patches.
+  * Fix typo in po templates. (Closes: #553376)
+  * Adds pt, de, sv, ru, es, ja translations.
+    (Closes: #553375, #551002, #552736, #554351, #560999, #555693)
+  * Fixes CVE-2009-4459 : uses the title tag before defining
+    the character encoding in a meta tag. (Closes: #563940)
+  * Install does not fail if rake fails (Closes: #566160)
+  * Several rails 2.2 incompatibilities have been fixed,
+    patches are applied with greater care. (Closes: #555956, #567512)
+
+ -- Jérémy Lal <kapouer@melix.org>  Sat, 30 Jan 2010 16:48:26 +0100
+
+redmine (0.9.0~svn2907-1) unstable; urgency=low
+
+  * Upstream update.
+  * Supports reconfigure in postinst.
+  * Db migration of plugins in postinst.
+  * Advertise async_smtp in email.yml example.
+
+ -- Jérémy Lal <kapouer@melix.org>  Sat, 10 Oct 2009 17:43:46 +0200
+
+redmine (0.9.0~svn2903-1) unstable; urgency=low
+
+  * Upstream update.
+  * Removes circular dependencies (Closes: #549442)
+  * Session cookies path should respect RAILS_RELATIVE_URL_ROOT env variable.
+  * Add folder for proper initialization of some plugins.
+
+ -- Jérémy Lal <kapouer@melix.org>  Thu, 08 Oct 2009 18:59:18 +0200
+
+redmine (0.9.0~svn2902-1) unstable; urgency=low
+
+  * Initial release (Closes: #478741)
+
+ -- Jérémy Lal <kapouer@melix.org>  Thu, 01 Oct 2009 12:16:16 +0200

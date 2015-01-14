@@ -1,0 +1,203 @@
+#!/bin/sh
+
+set -e
+#set -x
+
+# variants must be placed before to be automatically configured
+redLocales="ar, bg, bs, ca, cs, da, de, el, en-gb, en, es, et, eu, fa, fi, fr, gl, he, hr, hu, id, it, ja, ko, lt, lv, mk, mn, nl, no, pl, pt-br, pt, ro, ru, sk, sl, sq, sr-yu, sr, sv, th, tr, uk, vi, zh-tw, zh"
+
+. /usr/share/debconf/confmodule
+db_version 2.0
+# This conf script is capable of backing up
+db_capb backup
+
+OUTSTATE=2
+STATE=1
+
+while [ "$STATE" != "0" -a "$STATE" != "$OUTSTATE" ]; do
+	fIndex=$(($STATE / 10))
+	fState=$(($STATE % 10))
+	fNextState=$((($fIndex+1)*10))
+	if [ $STATE -eq 1 ]; then
+		# upgrade debconf db if we detect an old redmine version (<= 0.9.0~svn2819) was installed
+		# detection
+		fCode=0
+		db_get redmine/dbconfig-install || fCode=$?
+		if [ $fCode -eq 0 ]; then
+			echo "Old redmine version detected, migrating dbconfig common data..."
+			# remove deprecated debconf templates
+			db_unregister redmine/reconfigure-webserver || true
+			db_unregister redmine/restart-webserver || true
+			db_unregister redmine/webserver-install || true
+			# copy all current questions to instances/default ones
+			# get old questions
+			fOldQuest=$(debconf-show redmine)
+			OLD_IFS=$IFS
+			# ugly, if somebody can tell me how to escape \n, please send me an email to kapouer@melix.org
+			fNewline="
+"
+			IFS=$fNewline
+			# for each line, we want to get the three fields, seen, question, value
+			for lLine in $fOldQuest; do
+				IFS=$OLD_IFS
+				lSeen="${lLine%% *}"
+				if [ "$lSeen" = "*" ]; then
+					lSeen="true"
+					lStr="${lLine#\* }"
+				else
+					lSeen="false"
+					lStr="${lLine#  }"
+				fi
+				lName="${lStr%%\:*}"
+				if [ "${lName#redmine/instances/}" = "$lName" ]; then
+					fCode=0
+					db_get $lName || fCode=$?
+					lVal=""
+					if [ $fCode -eq 0 ]; then
+						lVal="$RET"
+					fi
+					lNewname="redmine/instances/default${lName#redmine}"
+					if [ -n "$lVal" ]; then
+						db_register "$lName" "$lNewname"
+						db_set "$lNewname" "$lVal"
+						db_fset "$lNewname" seen "$lSeen"
+					fi
+					if [ "$lName" != "redmine/default-language" ]; then
+						# we need redmine/default-language later
+						db_unregister "$lName" || true
+					fi
+				fi
+				IFS=$fNewline
+			done
+			IFS=$OLD_IFS
+			
+			# setup default as an old instance
+			db_set redmine/current-instances "default"
+			db_input high redmine/notify-migration || true
+		fi
+		db_get redmine/current-instances || true
+		gOldInstances="${RET}"
+		
+		# what is that for ? we just got it.
+		# db_set redmine/current-instances $gOldInstances
+		db_input medium redmine/current-instances || true
+		if db_go; then
+			STATE=$fNextState
+		else
+			STATE=0
+		fi
+		db_get redmine/current-instances || true
+		gInstances="${RET}"
+		gRemovedInstances=""
+		for lOld in $gOldInstances; do
+			lFound=0
+			for lCur in $gInstances; do
+				if [ $lCur = $lOld ]; then
+					lFound=1
+					break
+				fi
+			done
+			if [ $lFound -eq 0 ]; then
+				if [ -z "$gRemovedInstances" ]; then gRemovedInstances="$lOld";
+				else gRemovedInstances="$gRemovedInstances $lOld";
+				fi
+			fi
+		done
+		db_set redmine/old-instances "$gRemovedInstances"
+		gNb=$(echo "$gInstances" | wc -w)
+		OUTSTATE=$((($gNb+1) * 10))
+	else
+		fIndex=$(($STATE / 10))
+		fState=$(($STATE % 10))
+		fNextState=$((($fIndex+1)*10))
+		fInstance=$(eval "echo \"$gInstances\" | awk '{print \$$fIndex}'")
+		case "$fState" in
+		0)
+			if [ -f /usr/share/dbconfig-common/dpkg/config ]; then
+				dbc_dbtypes="sqlite3, pgsql, mysql"
+				dbc_authmethod_user="password"
+				# per-instance dbuser to avoid #695774 - and behave like dbname
+				fCode=0
+				db_get redmine/instances/$fInstance/db/app-user || fCode=$?
+				if [ $fCode -eq 0 -a -n "$RET" ]; then
+					dbc_dbuser="$RET"
+				else
+					dbc_dbuser=redmine_$fInstance
+				fi
+				# use same dbname if one has been registered in debconf before
+				# this is also needed for migration from version <= 0.9.0~svn2819
+				fCode=0
+				db_get redmine/instances/$fInstance/db/dbname || fCode=$?
+				if [ $fCode -eq 0 -a -n "$RET" ]; then
+					dbc_dbname="$RET"
+				else
+					dbc_dbname=redmine_$fInstance
+				fi
+				fCode=0
+				db_get redmine/instances/$fInstance/db/basepath || fCode=$?
+				if [ $fCode -eq 0 -a -n "$RET" ]; then
+					dbc_basepath="$RET"
+				else
+					dbc_basepath=""
+				fi
+				( . /usr/share/dbconfig-common/dpkg/config ; dbc_go redmine/instances/$fInstance $@ )
+				if [ $? -ne 0 ] ; then
+					if [ $fIndex -gt 0 ];then
+						STATE=$((($fIndex-1)*10 + 1))
+					else
+						STATE=0
+					fi
+					continue
+				fi
+				db_get redmine/instances/$fInstance/dbconfig-install || true
+				if [ "$RET" != "true" ]; then
+					STATE=$fNextState
+				else
+					STATE=$(($STATE + 1))
+				fi
+			else
+				STATE=$OUTSTATE
+			fi
+		;;
+		1)
+			# supported locales
+			
+			# now check if current LANG correspond to one of those locales, only if LANG is like aa_BB.YY
+			locstr=${LANG%.*}
+			locMin=${locstr%_*}
+			locMaj=$(echo ${locstr#*_} | tr "[:upper:]" "[:lower:]")
+			locTrans="$locMin-$locMaj"
+			OLD_IFS=$IFS
+			IFS=", "
+			locAv="en"
+			for i in $redLocales; do
+				if [ "$locTrans" = "$i" ];then
+					locAv=$i
+					break
+				elif [ "$locMin" = "$i" ];then
+					locAv=$i
+					break
+				fi
+			done
+			IFS=$OLD_IFS
+			questionLanguage="redmine/instances/${fInstance}/default-language"
+			# register only if needed
+			fCode=0
+			db_get $questionLanguage || fCode=$?
+			if [ $fCode -eq 10 ]; then
+				db_register "redmine/default-language" $questionLanguage
+			fi
+			db_subst $questionLanguage availableLocales $redLocales
+			db_subst $questionLanguage defaultLocale $locAv
+			db_set $questionLanguage $locAv
+			db_input medium $questionLanguage || true
+			
+			if db_go; then
+				STATE=$fNextState
+			else
+				STATE=$(($STATE - 1))
+			fi
+		;;
+		esac
+	fi
+done

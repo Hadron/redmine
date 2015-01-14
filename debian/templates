@@ -1,0 +1,42 @@
+Template: redmine/notify-migration
+Type: note
+_Description: Redmine package now supports multiple instances
+ You are migrating from an unsupported version.
+ The current instance will be now called the "default" instance.
+ Please check your web server configuration files, see README.Debian.
+
+Template: redmine/old-instances
+Type: string
+_Description: Redmine instances to be deconfigured:
+ Configuration files for these instances will be removed.
+ .
+ Database (de)configuration will be asked accordingly.
+
+Template: redmine/current-instances
+Type: string
+Default: default
+_Description: Redmine instances to be configured or upgraded:
+ Space-separated list of instances identifiers.
+ . 
+ Each instance has its configuration files in /etc/redmine/<instance-identifier>/
+ .
+ To deconfigure an instance, remove its identifier from this list.
+
+Template: redmine/default-language
+Type: select
+Choices: ${availableLocales}
+Default: ${defaultLocale}
+_Description: Default redmine language:
+
+Template: redmine/missing-redmine-package
+Type: error
+#flag:translate!:5
+_Description: redmine-${dbtype} package required
+ Redmine instance ${instance} is configured to use database type ${dbtype},
+ but the corresponding redmine-${dbtype} package is not installed.
+ .
+ Configuration of instance ${instance} is aborted.
+ .
+ To finish that configuration, please install the redmine-${dbtype} package, and reconfigure redmine using:
+ .
+ dpkg-reconfigure -plow redmine

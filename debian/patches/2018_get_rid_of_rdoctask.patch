@@ -1,0 +1,40 @@
+--- redmine.orig/lib/plugins/acts_as_tree/Rakefile
++++ redmine/lib/plugins/acts_as_tree/Rakefile
+@@ -1,6 +1,6 @@
+ require 'rake'
+ require 'rake/testtask'
+-require 'rake/rdoctask'
++require 'rdoc/task'
+ 
+ desc 'Default: run unit tests.'
+ task :default => :test
+--- redmine.orig/lib/plugins/acts_as_versioned/Rakefile
++++ redmine/lib/plugins/acts_as_versioned/Rakefile
+@@ -2,7 +2,7 @@ require 'rubygems'
+ 
+ Gem::manage_gems
+ 
+-require 'rake/rdoctask'
++require 'rdoc/task'
+ require 'rake/packagetask'
+ require 'rake/gempackagetask'
+ require 'rake/testtask'
+--- redmine.orig/lib/plugins/gravatar/Rakefile
++++ redmine/lib/plugins/gravatar/Rakefile
+@@ -1,5 +1,5 @@
+ require 'spec/rake/spectask'
+-require 'rake/rdoctask'
++require 'rdoc/task'
+ 
+ desc 'Default: run all specs'
+ task :default => :spec
+--- redmine.orig/lib/plugins/open_id_authentication/Rakefile
++++ redmine/lib/plugins/open_id_authentication/Rakefile
+@@ -1,6 +1,6 @@
+ require 'rake'
+ require 'rake/testtask'
+-require 'rake/rdoctask'
++require 'rdoc/task'
+ 
+ desc 'Default: run unit tests.'
+ task :default => :test

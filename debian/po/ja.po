@@ -1,0 +1,120 @@
+# Copyright (C) 2009-2010 Jérémy Lal <kapouer@melix.org>
+# This file is distributed under the same license as redmine package.
+# Hideki Yamane <henrich@debian.or.jp>, 2009-2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: redmine 1.0.0-4\n"
+"Report-Msgid-Bugs-To: redmine@packages.debian.org\n"
+"POT-Creation-Date: 2010-08-13 14:00+0200\n"
+"PO-Revision-Date: 2010-08-01 08:04-0400\n"
+"Last-Translator: Hideki Yamane <henrich@debian.org>\n"
+"Language-Team: Japanese <debian-japanese@lists.debian.org>\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: note
+#. Description
+#: ../templates:1001
+msgid "Redmine package now supports multiple instances"
+msgstr "redmine パッケージは複数のインスタンスをサポートするようになりました"
+
+#. Type: note
+#. Description
+#: ../templates:1001
+msgid ""
+"You are migrating from an unsupported version. The current instance will be "
+"now called the \"default\" instance. Please check your web server "
+"configuration files, see README.Debian."
+msgstr ""
+"サポートされていないバージョンからの移行を行っています。現在のインスタンスは"
+"「デフォルト」インスタンスと呼ばれる様になります。ウェブサーバの設定ファイル"
+"を確認してください。詳細は README.Debian を確認ください。"
+
+#. Type: string
+#. Description
+#: ../templates:2001
+msgid "Redmine instances to be deconfigured:"
+msgstr "設定を初期化する redmine のインスタンス:"
+
+#. Type: string
+#. Description
+#: ../templates:2001
+msgid "Configuration files for these instances will be removed."
+msgstr "これらのインスタンスの設定ファイルは削除されます。"
+
+#. Type: string
+#. Description
+#: ../templates:2001
+msgid "Database (de)configuration will be asked accordingly."
+msgstr "データベースの設定 (と初期化) が適宜尋ねられます。"
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid "Redmine instances to be configured or upgraded:"
+msgstr "設定またはアップグレードされる redmine のインスタンス:"
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid "Space-separated list of instances identifiers."
+msgstr "空白で区切られたインスタンス識別子のリストです。"
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid ""
+"Each instance has its configuration files in /etc/redmine/<instance-"
+"identifier>/"
+msgstr ""
+"各インスタンスは設定ファイルを /etc/redmine/<instance-identifier>/ に持ってい"
+"ます。"
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid "To deconfigure an instance, remove its identifier from this list."
+msgstr ""
+"インスタンスの設定を削除するには、このリストから識別子を削除してください。"
+
+#. Type: select
+#. Description
+#: ../templates:4001
+msgid "Default redmine language:"
+msgstr "redmine のデフォルト言語:"
+
+#. Type: error
+#. Description
+#: ../templates:5001
+msgid "redmine-${dbtype} package required"
+msgstr "redmine-${dbtype} パッケージが必要です"
+
+#. Type: error
+#. Description
+#: ../templates:5001
+msgid ""
+"Redmine instance ${instance} is configured to use database type ${dbtype}, "
+"but the corresponding redmine-${dbtype} package is not installed."
+msgstr ""
+"redmine のインスタンス ${instance} はデータベース ${dbtype} を使うように設定"
+"されていますが、それに対応する redmine-${dbtype} がインストールされていませ"
+"ん。"
+
+#. Type: error
+#. Description
+#: ../templates:5001
+msgid "Configuration of instance ${instance} is aborted."
+msgstr "インスタンス ${instance} の設定が強制終了しました。"
+
+#. Type: error
+#. Description
+#: ../templates:5001
+msgid ""
+"To finish that configuration, please install the redmine-${dbtype} package, "
+"and reconfigure redmine using:"
+msgstr ""
+"この設定を完了するには、redmine-${dbtype} パッケージをインストールして、以下"
+"のようにして redmine を再設定してください:"

@@ -1,0 +1,31 @@
+Description: Force table encoding in mysql
+ mysql default encoding is not UTF8, but forcing table encoding is possible.
+ dbconfig-common does not provide appropriate configuration variable,
+ so here the mysql adapter is modified to respect encoding set in database.yml
+Forwarded: not-needed
+Author: Jérémy Lal <kapouer@melix.org>
+Bug-Debian: http://bugs.debian.org/599374
+Bug-Rails: http://rails.lighthouseapp.com/projects/8994/tickets/5830
+Last-Update: 2010-10-17
+--- redmine.orig/config/initializers/10-patches.rb
++++ redmine/config/initializers/10-patches.rb
+@@ -1,4 +1,19 @@
+ require 'active_record'
++require 'active_record/connection_adapters/abstract_mysql_adapter'
++
++module ActiveRecord
++  module ConnectionAdapters
++    class MysqlAdapter < AbstractMysqlAdapter
++      def create_table(table_name, options = {}) #:nodoc:
++        encoding = @config[:encoding]
++        if encoding
++          options = options.reverse_merge(:options => "DEFAULT CHARSET=#{encoding}")
++        end
++        super(table_name, options.reverse_merge(:options => "ENGINE=InnoDB"))
++      end
++    end
++  end
++end
+ 
+ module ActiveRecord
+   class Base

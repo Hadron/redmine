@@ -1,0 +1,30 @@
+#!/bin/sh
+
+dbadapter="${1:-sqlite3}"
+webserver="${2:-apache2-passenger}"
+
+exec 2>&1
+set -eux
+
+grep "adapter:[[:space:]]*$dbadapter" /etc/redmine/default/database.yml
+
+setup_apache2() {
+  sed -e '/<VirtualHost/ a ServerName localhost' /usr/share/doc/redmine/examples/$webserver-host.conf > /etc/apache2/sites-enabled/redmine.conf
+  service apache2 restart
+}
+
+case "$webserver" in
+  apache2)
+    a2enmod rewrite
+    setup_apache2
+    ;;
+  apache2-passenger)
+    setup_apache2
+    ;;
+  *)
+    set +x
+    echo "Testing under $webserver not supported yet"
+    exit 1
+esac
+
+curl -s http://localhost/ | grep 'meta.*name="description".*content="Redmine"'

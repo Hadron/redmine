@@ -1,0 +1,33 @@
+UPDATE PROCEDURE
+================
+
+Some files are excluded to comply with DFSG.
+debian/gbp.conf defines a filter that lets git-import-orig do the work :
+
+1. uscan gets the latest tarball
+2. compare new and old non-dfsg-repacked tarballs (and update the list
+   in debian/gbp.conf, also it might be the right time to update
+   debian/copyright too).
+3. git-import-orig ../redmine_xxxx.tar.gz
+   The upstream version must be for example "1.3.2+dfsg1".
+
+
+RAKE TEST
+=========
+
+1. dpkg-reconfigure redmine, add a "test" sqlite3 instance
+
+2. edit /etc/redmine/test/database.yml, copy 'production' section and rename it 'test' (not needed with redmine 1.2.0 configuration.yml which has the default section ?)
+
+3. gem dependencies are listed in group :test in /usr/share/redmine/Gemfile.
+   Either install matching debian packages (ruby-mocha, ruby-shoulda),
+   or, if the tests output "missing method" errors, uncomment them in Gemfile
+   and do `bundle install`.
+   
+4. run tests :
+    cd /usr/share/redmine
+    mkdir -p tmp/test
+    X_DEBIAN_SITEID=test RAILS_ENV=test rake test:scm:setup:all
+    X_DEBIAN_SITEID=test RAILS_ENV=test rake test
+
+   READ doc/RUNNING_TESTS in redmine source package to get more informations.

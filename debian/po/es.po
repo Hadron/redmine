@@ -1,0 +1,146 @@
+# redmine po-debconf translation to Spanish
+# Copyright (C) 2009 Software in the Public Interest
+# This file is distributed under the same license as the redmine package.
+#
+# Changes:
+#   - Initial translation
+#       Ricardo Fraile <rikr@esdebian.org>, 2009
+#   - Update
+#       Ricardo Fraile <rikr@esdebian.org>, 2010
+#
+# Traductores, si no conocen el formato PO, merece la pena leer la
+# documentación de gettext, especialmente las secciones dedicadas a este
+# formato, por ejemplo ejecutando:
+#       info -n '(gettext)PO Files'
+#       info -n '(gettext)Header Entry'
+#
+# Equipo de traducción al español, por favor lean antes de traducir
+# los siguientes documentos:
+#
+#   - El proyecto de traducción de Debian al español
+#     http://www.debian.org/intl/spanish/
+#     especialmente las notas y normas de traducción en
+#     http://www.debian.org/intl/spanish/notas
+#
+#   - La guía de traducción de po's de debconf:
+#     /usr/share/doc/po-debconf/README-trans
+#     o http://www.debian.org/intl/l10n/po-debconf/README-trans
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: redmine 0.9.0\n"
+"Report-Msgid-Bugs-To: redmine@packages.debian.org\n"
+"POT-Creation-Date: 2010-08-13 14:00+0200\n"
+"PO-Revision-Date: 2010-08-03 17:35+0100\n"
+"Last-Translator: Ricardo Fraile <rikr@esdebian.org>\n"
+"Language-Team: Spanish <debian-l10n-spanish@lists.debian.org>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: note
+#. Description
+#: ../templates:1001
+msgid "Redmine package now supports multiple instances"
+msgstr "Ahora el paquete Redmine permite ejecutar múltiples instancias"
+
+#. Type: note
+#. Description
+#: ../templates:1001
+msgid ""
+"You are migrating from an unsupported version. The current instance will be "
+"now called the \"default\" instance. Please check your web server "
+"configuration files, see README.Debian."
+msgstr ""
+"Está migrando desde una versión sin soporte. La instancia actual se llamará "
+"\"default\". Por favor, compruebe los archivos de configuración de su servidor "
+"web, vea README.Debian."
+
+#. Type: string
+#. Description
+#: ../templates:2001
+msgid "Redmine instances to be deconfigured:"
+msgstr "Las instancias de Redmine que se van a desconfigurar:"
+
+#. Type: string
+#. Description
+#: ../templates:2001
+msgid "Configuration files for these instances will be removed."
+msgstr ""
+"Los archivos de configuración para estas instancias que se van a eliminar."
+
+#. Type: string
+#. Description
+#: ../templates:2001
+msgid "Database (de)configuration will be asked accordingly."
+msgstr "La base de datos de (des)configuración que se pedirá."
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid "Redmine instances to be configured or upgraded:"
+msgstr "Las instancias de Redmine que se van a configurar o actualizar:"
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid "Space-separated list of instances identifiers."
+msgstr ""
+"La lista, separada por espacios, de los identificadores de las instancias."
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid ""
+"Each instance has its configuration files in /etc/redmine/<instance-"
+"identifier>/"
+msgstr ""
+"Cada instancia tiene su archivo de configuración en /etc/redmine/"
+"<identificador-de-instancia>/"
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid "To deconfigure an instance, remove its identifier from this list."
+msgstr ""
+"Para desconfigurar una instancia, elimine su identificador de esta lista."
+
+#. Type: select
+#. Description
+#: ../templates:4001
+msgid "Default redmine language:"
+msgstr "Idioma predeterminado para Redmine:"
+
+#. Type: error
+#. Description
+#: ../templates:5001
+msgid "redmine-${dbtype} package required"
+msgstr "redmine-${dbtype} paquete necesario"
+
+#. Type: error
+#. Description
+#: ../templates:5001
+msgid ""
+"Redmine instance ${instance} is configured to use database type ${dbtype}, "
+"but the corresponding redmine-${dbtype} package is not installed."
+msgstr ""
+"La instancia de Redmine ${instance} está configurada para usar una base de "
+"datos tipo ${dbtype}, pero el correspondiente paquete redmine-${dbtype} no "
+"se encuentra instalado."
+
+#. Type: error
+#. Description
+#: ../templates:5001
+msgid "Configuration of instance ${instance} is aborted."
+msgstr "Se ha abortado la configuración de la instancia ${instance}."
+
+#. Type: error
+#. Description
+#: ../templates:5001
+msgid ""
+"To finish that configuration, please install the redmine-${dbtype} package, "
+"and reconfigure redmine using:"
+msgstr ""
+"Para finalizar la configuración, por favor, instale el paquete redmine-"
+"${dbtype}, yvuelva a configurar Redmine usando:"

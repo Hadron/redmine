@@ -1,0 +1,124 @@
+# Italian translation of redmine debconf messages
+# Copyright (C) 2014 redmine package copyright holder
+# This file is distributed under the same license as the redmine package.
+# Beatrice Torracca <beatricet@libero.it>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: redmine\n"
+"Report-Msgid-Bugs-To: redmine@packages.debian.org\n"
+"POT-Creation-Date: 2010-08-13 14:00+0200\n"
+"PO-Revision-Date: 2014-11-08 14:42+0200\n"
+"Last-Translator: Beatrice Torracca <beatricet@libero.it>\n"
+"Language-Team: Italian <debian-l10n-italian@lists.debian.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Virtaal 0.7.1\n"
+
+#. Type: note
+#. Description
+#: ../templates:1001
+msgid "Redmine package now supports multiple instances"
+msgstr "Il pacchetto redmine ora supporta più istanze"
+
+# Lasciato "default" invariato perché in seguito viene usata una variabile per il nome di istanza e un identificatore di istanza e penso sia letteralmente "default"
+#. Type: note
+#. Description
+#: ../templates:1001
+msgid ""
+"You are migrating from an unsupported version. The current instance will be "
+"now called the \"default\" instance. Please check your web server "
+"configuration files, see README.Debian."
+msgstr ""
+"Si sta eseguendo la migrazione da una versione non supportata. L'istanza "
+"corrente verrà ora chiamata istanza «default». Controllare i propri file di "
+"configurazione del server web, vedere README.Debian."
+
+#. Type: string
+#. Description
+#: ../templates:2001
+msgid "Redmine instances to be deconfigured:"
+msgstr "Istanze di redmine da deconfigurare:"
+
+#. Type: string
+#. Description
+#: ../templates:2001
+msgid "Configuration files for these instances will be removed."
+msgstr "I file di configurazione per queste istanze saranno rimossi."
+
+#. Type: string
+#. Description
+#: ../templates:2001
+msgid "Database (de)configuration will be asked accordingly."
+msgstr ""
+"Verranno poste, se necessario, domande sulla (de)configurazione dei database."
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid "Redmine instances to be configured or upgraded:"
+msgstr "Istanze di redmine da configurare o aggiornare:"
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid "Space-separated list of instances identifiers."
+msgstr "Elenco separato da spazi di identificatori di istanza."
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid ""
+"Each instance has its configuration files in /etc/redmine/<instance-"
+"identifier>/"
+msgstr ""
+"Ogni istanza ha i propri file di configurazione in /etc/redmine/"
+"<identificatore-istanza>/"
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid "To deconfigure an instance, remove its identifier from this list."
+msgstr ""
+"Per deconfigurare un'istanza, rimuovere il suo identificatore da questo "
+"elenco."
+
+#. Type: select
+#. Description
+#: ../templates:4001
+msgid "Default redmine language:"
+msgstr "Lingua predefinita per redmine:"
+
+#. Type: error
+#. Description
+#: ../templates:5001
+msgid "redmine-${dbtype} package required"
+msgstr "Richiesto il pacchetto redmine-${dbtype}"
+
+#. Type: error
+#. Description
+#: ../templates:5001
+msgid ""
+"Redmine instance ${instance} is configured to use database type ${dbtype}, "
+"but the corresponding redmine-${dbtype} package is not installed."
+msgstr ""
+"L'istanza ${instance} di redmine è configurata per usare il tipo di database "
+"${dbtype}, ma il pacchetto redmine-${dbtype} corrispondente non è installato."
+
+#. Type: error
+#. Description
+#: ../templates:5001
+msgid "Configuration of instance ${instance} is aborted."
+msgstr "Configurazione dell'istanza ${instance} abbandonata."
+
+#. Type: error
+#. Description
+#: ../templates:5001
+msgid ""
+"To finish that configuration, please install the redmine-${dbtype} package, "
+"and reconfigure redmine using:"
+msgstr ""
+"Per completare tale configurazione installare il pacchetto redmine-${dbtype} "
+"e riconfigurare redmine usando:"

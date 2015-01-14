@@ -1,0 +1,20 @@
+Description: Make sure that invalid cache from older versions is not used for languages_options
+Author: Jean-Philippe Lang <jp_lang@yahoo.fr>
+Origin: upstream
+Bug-Debian: https://bugs.debian.org/764230
+Applied-Upstream: https://www.redmine.org/projects/redmine/repository/revisions/13544
+Reviewed-by: Antonio Terceiro <terceiro@debian.org>
+Last-Update: 2014-11-30
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/lib/redmine/i18n.rb
++++ b/lib/redmine/i18n.rb
+@@ -92,7 +92,7 @@ module Redmine
+     #
+     # The result is cached to prevent from loading all translations files.
+     def languages_options
+-      ActionController::Base.cache_store.fetch "i18n/languages_options" do
++      ActionController::Base.cache_store.fetch "i18n/languages_options/#{Redmine::VERSION}" do
+         valid_languages.map {|lang| [ll(lang.to_s, :general_lang_name), lang.to_s]}.sort {|x,y| x.first <=> y.first }
+       end
+     end

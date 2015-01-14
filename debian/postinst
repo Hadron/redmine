@@ -1,0 +1,319 @@
+#!/bin/sh
+# postinst script for redmine
+#
+# see: dh_installdeb(1)
+
+set -e
+#set -x
+
+RAKE_VERBOSE=false
+
+. /usr/share/debconf/confmodule
+
+# remove and purge old instances each time postinst is called
+db_get redmine/old-instances || true
+gOldInstances="${RET}"
+for lInstance in $gOldInstances; do
+	db_get redmine/instances/$lInstance/dbconfig-install || true
+	if [ "$RET" = "true" ]; then
+		( . /usr/share/dbconfig-common/dpkg/prerm ; dbc_go redmine/instances/$lInstance remove )
+	fi
+done
+
+for lInstance in $gOldInstances; do
+	db_get redmine/instances/$lInstance/dbconfig-install || true
+	if [ "$RET" = "true" ]; then
+		( . /usr/share/dbconfig-common/dpkg/postrm ; dbc_go redmine/instances/$lInstance purge )
+	fi
+	if which ucf >/dev/null 2>&1; then
+		ucf --purge /etc/redmine/$lInstance/database.yml
+		ucf --purge /etc/redmine/$lInstance/session.yml
+		ucf --purge /etc/redmine/$lInstance/configuration.yml
+		# email.yml was renamed to configuration.yml since 1.2.0
+		ucf --purge /etc/redmine/$lInstance/email.yml
+	fi
+	rm -rf /etc/redmine/$lInstance
+done
+db_set redmine/old-instances ""
+
+fRailsEnv=production
+fRailsLog=/var/log/redmine
+fRailsVar=/var/lib/redmine
+fRailsCache=/var/cache/redmine
+fRailsDir=/usr/lib/ruby/vendor_ruby/rails
+if [ ! -e "$fRailsDir" ]; then
+	# keep rails package compatibility
+	fRailsDir="/usr/share/rails-ruby1.8"
+fi
+
+case "$1" in
+	configure|reconfigure)
+		# passenger runs as the owner of that file, thanks Micah Anderson.
+		chown www-data:root /usr/share/redmine/config/environment.rb
+		chown -f www-data:www-data $fRailsLog
+		chown -f www-data:www-data $fRailsVar
+		chown -f www-data:www-data $fRailsCache
+		savedir="`pwd`"
+		cd /usr/share/redmine
+		if [ -L vendor/railties ]; then
+			# rails 2.2 to 2.3 migration
+			rm -f vendor/actionmailer
+			rm -f vendor/actionpack
+			rm -f vendor/activemodel
+			rm -f vendor/activerecord
+			rm -f vendor/activeresource
+			rm -f vendor/activesupport
+			rm -f vendor/railties
+			rm -f vendor/rails
+		fi
+		if [ -L vendor/rails ]; then
+			# rails 2.3 to ruby-rails-2.3 migration
+			fMigrateLink=$(readlink vendor/rails)
+			if [ "$fMigrateLink" != "$fRailsDir" ]; then
+				rm -f vendor/rails
+			else
+			        echo "Inconsistent link in vendor/rails, please remove manually"
+			fi
+		fi
+		if [ ! -e app/views/members ]; then
+			mkdir app/views/members
+		fi
+		if [ ! -e app/sweepers ]; then
+			mkdir app/sweepers
+		fi
+		# this directory should never be used: /usr not writable policy
+		if [ -e tmp ]; then
+			rm -rf tmp
+		fi
+		cd $savedir
+	;;
+
+	abort-upgrade|abort-remove|abort-deconfigure|triggered)
+	;;
+
+	*)
+		echo "postinst called with unknown argument \`$1'" >&2
+		exit 1
+	;;
+esac
+
+db_get redmine/current-instances || true
+gInstances="${RET}"
+for lInstance in $gInstances; do
+	fRailsEtc=/etc/redmine/$lInstance
+	fRailsLog=/var/log/redmine/$lInstance
+	fRailsVar=/var/lib/redmine/$lInstance
+	fRailsCache=/var/cache/redmine/$lInstance
+	# dbconfig needs this folder to ouput database.yml
+	mkdir -p $fRailsEtc
+	chown -f www-data:www-data $fRailsEtc
+	withdb=0
+	lInstall=0
+	db_get redmine/instances/$lInstance/dbconfig-install || true
+	if [ "$RET" = "true" ]; then
+		lInstall=1
+		fCode=0
+		db_get redmine/instances/$lInstance/dbconfig-reinstall || fCode=$?
+		if [ $fCode -eq 0 ]; then
+			if [ "$RET" = "false" ]; then
+				db_fget redmine/instances/$lInstance/dbconfig-reinstall seen || true
+				if [ "$RET" = "true" ]; then
+					lInstall=0
+				fi
+			fi
+		fi
+	fi
+	
+	if [ $lInstall -eq 1 ]; then
+		fYml=$fRailsEtc/database.yml.new
+		lTemplate="database.yml.template"
+		# if dbtype=sqlite3, use dbbasepath, else dbname
+		fCode=0
+		db_get redmine/instances/$lInstance/database-type || fCode=$?
+		lDbType="$RET"
+		if [ $fCode -eq 0 -a "$lDbType" = "sqlite3" ]; then
+			lTemplate="database-sqlite.yml.template"
+			lDbType="sqlite"
+		fi
+		# check if redmine-$lDbType is installed, if not, don't configure and explain what to do
+		hasPack=$(dpkg-query -W -f='${Status}\n' "redmine-$lDbType" |cut -d" " -f3)
+		if [ "$hasPack" != "installed" ]; then
+			# not installed, this cannot be detected in debian/config
+			# since redmine-* packages are not yet installed
+			db_subst redmine/missing-redmine-package dbtype "$lDbType"
+			db_subst redmine/missing-redmine-package instance "$lInstance"
+			db_fset redmine/missing-redmine-package seen "false"
+			db_input high redmine/missing-redmine-package || true
+			db_go || true
+			db_stop || true
+			echo "Skipping $lInstance because of missing dependency."
+			continue
+		fi
+		
+		dbc_generate_include=template:$fYml
+		dbc_generate_include_args="-o template_infile=/usr/share/redmine/templates/${lTemplate}"
+		dbc_generate_include_owner="root:www-data"
+		dbc_generate_include_perms="640"
+		dbc_dbfile_owner="root:www-data"
+		# this is for sqlite3 to be r/w for www-data
+		dbc_dbfile_perms="0660"
+		# per-instance dbuser to avoid #695774 - and behave like dbname
+		fCode=0
+		db_get redmine/instances/$lInstance/db/app-user || fCode=$?
+		if [ $fCode -eq 0 -a -n "$RET" ]; then
+			dbc_dbuser="$RET"
+		else
+			dbc_dbuser=redmine_$lInstance
+		fi
+		# make sure mysql or pgsql database charset is UTF8
+		dbc_mysql_createdb_encoding="UTF8"
+		dbc_pgsql_createdb_encoding="UTF8"
+		# use same dbname if one has been registered in debconf before
+		# this is also needed for migration from version <= 0.9.0~svn2819
+		fCode=0
+		db_get redmine/instances/$lInstance/db/dbname || fCode=$?
+		if [ $fCode -eq 0 -a -n "$RET" ]; then
+			dbc_dbname="$RET"
+		else
+			dbc_dbname=redmine_$lInstance
+		fi
+		fCode=0
+		db_get redmine/instances/$lInstance/db/basepath || fCode=$?
+		if [ $fCode -eq 0 -a -n "$RET" ]; then
+			dbc_basepath="$RET"
+		fi
+		
+		ucf --purge $fYml
+		( . /usr/share/dbconfig-common/dpkg/postinst ; dbc_go redmine/instances/$lInstance $@ )
+		ucf --purge $fYml
+		
+		if [ -e $fYml ]; then
+			hasdb=$(grep -m 1 -o -E 'adapter: (mysql|mysql2|pgsql|sqlite3|postgresql)' $fYml) || true
+			if [ -n "$hasdb" ]; then
+				hasdb=$(echo -n ${hasdb#*:})
+				withdb=1
+				case "$hasdb" in
+					mysql)
+						sed -i -r -e 's/mysql/mysql2/g' $fYml
+						;;
+					postgresql|pgsql)
+						sed -i -r -e 's/pgsql/postgresql/g' $fYml
+					;;
+					sqlite3)
+						sed -i -r -e 's/^[^#]+((host|port|username|password): [^:]*)$/# \1/g' $fYml
+					;;
+				esac
+			fi
+			ucf --debconf-ok $fYml /etc/redmine/$lInstance/database.yml
+			rm -f $fYml
+		fi
+	elif [ -e "$fRailsEtc/database.yml" ]; then
+		# don't reinstall, but upgrade
+		withdb=1
+		lInstall=0
+	fi
+	case "$1" in
+		configure|reconfigure|triggered)
+			if dpkg --compare-versions "$2" lt "2.3.0+dfsg1-3~"; then
+			    rm -rf $fRailsCache
+			fi
+			# create directories
+			mkdir -p $fRailsLog
+			mkdir -p $fRailsVar
+			mkdir -p $fRailsVar/files
+			mkdir -p $fRailsCache
+			mkdir -p $fRailsCache/cache
+			mkdir -p $fRailsCache/plugin_assets
+			chmod 750 $fRailsLog
+			chmod 750 $fRailsVar
+			chmod 755 $fRailsCache
+			chmod 755 $fRailsCache/cache
+			chmod 755 $fRailsCache/plugin_assets
+			chown -f www-data:www-data $fRailsLog
+			chown -f www-data:www-data $fRailsVar
+			chown -f www-data:www-data $fRailsVar/files
+			chown -f www-data:www-data $fRailsCache
+			chown -f www-data:www-data $fRailsCache/cache
+			chown -f www-data:www-data $fRailsCache/plugin_assets
+			savedir="`pwd`"
+			cd /usr/share/redmine
+			# copy schema.db to its instance directory
+			if [ -f db/schema.db ]; then
+				cp db/schema.db $fRailsCache/schema.db
+			fi
+			# if dpkg --compare-versions "$2" lt "1.2.0-1~"; then
+			if [ -e "$fRailsEtc/email.yml" -a ! -e "$fRailsEtc/configuration.yml" ]; then
+				# email.yml was renamed to configuration.yml since 1.2.0
+				mv "$fRailsEtc/email.yml" "$fRailsEtc/configuration.yml"
+			fi
+			#fi
+			# add secret key, set permissions, manage file with ucf
+			# trigger when session file doesn't exist or we are upgrading from previous version
+			if [ ! -f "${fRailsEtc}/session.yml" ] || dpkg --compare-versions "$2" lt "2.1.4+dfsg2-2~"; then
+				rake -s generate_secret_token YML_SESSION_FILENAME="session.yml.new" RAILS_ENV=$fRailsEnv X_DEBIAN_SITEID="${lInstance}" || true
+				chown -f root:www-data ${fRailsEtc}/session.yml.new
+				chmod 640 ${fRailsEtc}/session.yml.new
+				ucf --debconf-ok ${fRailsEtc}/session.yml.new ${fRailsEtc}/session.yml
+				rm ${fRailsEtc}/session.yml.new
+				# move old session_store.rb
+				echo "A new secret session key has been generated in ${fRailsEtc}/session.yml"
+			else
+				fHasOldSessionName=$(fgrep -c session_key "${fRailsEtc}/session.yml" || true)
+				if [ $fHasOldSessionName -gt 0 ]; then
+					# in-place, because ucf might be configured to keep the old version without asking
+					sed -i -r -e 's/session_key/key/g' ${fRailsEtc}/session.yml		
+				fi
+			fi
+			if [ -f config/initializers/session_store.rb ]; then
+				mv config/initializers/session_store.rb config/initializers/session_store.rb.dpkg-old
+				echo "The old secret session key can be found in
+/usr/share/redmine/config/initializers/session_store.rb.dpkg-old"
+			fi
+			if [ $withdb -eq 1 ]; then
+				db_get redmine/instances/${lInstance}/default-language && DEFAULT_LANGUAGE="$RET"
+				
+				# handle rake install
+				echo "Populating database for redmine instance \"${lInstance}\".
+This may take a while."
+				fCode=0
+				rake -s db:migrate RAILS_ENV=$fRailsEnv X_DEBIAN_SITEID="${lInstance}" VERBOSE=$RAKE_VERBOSE || fCode=$?
+				if [ $fCode -eq 0 ]; then
+					echo "Done."
+					if [ $lInstall -eq 1 ]; then
+						rake -s redmine:load_default_data RAILS_ENV=$fRailsEnv X_DEBIAN_SITEID="${lInstance}" REDMINE_LANG=$DEFAULT_LANGUAGE || true
+						# because rake task is executed as root here, and this file is used later by web server, make sure owner is www-data
+						touch ${fRailsLog}/production.log
+						chown -f www-data:www-data ${fRailsLog}/production.log
+					fi
+					# handle plugins migration
+					rake -s redmine:plugins:migrate RAILS_ENV=$fRailsEnv X_DEBIAN_SITEID="${lInstance}" VERBOSE=$RAKE_VERBOSE || true
+				else
+					echo "Error when running rake db:migrate, check database configuration."
+					exit 1
+				fi
+			else
+				echo "Redmine instance \"${lInstance}\" database must be configured manually."
+			fi
+			echo "Clearing the cache directory for redmine instance \"${lInstance}\".
+This may take a while."
+			rake -s tmp:cache:clear RAILS_ENV=$fRailsEnv X_DEBIAN_SITEID="${lInstance}" VERBOSE=$RAKE_VERBOSE || fCode=$?
+			if [ $fCode -ne 0 ]; then
+				echo "Error when clearing cache. You might need to clear the cache directory /var/cache/redmine/${lInstance}/ manually."
+			fi			
+			cd $savedir || true
+		;;
+	
+		abort-upgrade|abort-remove|abort-deconfigure)
+		;;
+	
+		*)
+			echo "postinst called with unknown argument \`$1'" >&2
+			exit 1
+		;;
+	esac
+done
+#DEBHELPER#
+
+exit 0
+
+

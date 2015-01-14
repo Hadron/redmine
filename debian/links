@@ -1,0 +1,8 @@
+# Link to libjs-prototype
+usr/share/javascript/prototype/prototype.js	usr/share/redmine/public/javascripts/prototype.js
+# Link to libjs-scriptaculous
+usr/share/javascript/scriptaculous/controls.js usr/share/redmine/public/javascripts/controls.js
+usr/share/javascript/scriptaculous/dragdrop.js usr/share/redmine/public/javascripts/dragdrop.js
+usr/share/javascript/scriptaculous/effects.js usr/share/redmine/public/javascripts/effects.js
+
+/dev/null                                     usr/share/redmine/Gemfile.lock

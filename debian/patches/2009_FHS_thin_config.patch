@@ -1,0 +1,15 @@
+Description: FHS support for thin config
+ See debian/doc/examples/thin-redmine.yml
+Forwarded: not-needed
+Author: Jérémy Lal <kapouer@melix.org>
+Last-Update: 2010-11-01
+--- redmine.orig/config/application.rb
++++ redmine/config/application.rb
+@@ -7,6 +7,7 @@ Rails.env ||= ActiveSupport::StringInqui
+ 
+ # for debian package : setup proper environment variables and paths
+ # To run redmine as unprivileged user, see /usr/share/doc/redmine/README.Debian
++ObjectSpace.each_object(Thin::Runner){|x| ENV["X_DEBIAN_SITEID"] = x.options[:x_debian_siteid] if x.options[:x_debian_siteid]} if defined?(Thin)
+ ENV['X_DEBIAN_SITEID'] ||= 'default'
+ ENV['RAILS_ETC'] ||= "/etc/redmine/#{ENV['X_DEBIAN_SITEID']}"
+ ENV['RAILS_LOG'] ||= "/var/log/redmine/#{ENV['X_DEBIAN_SITEID']}"

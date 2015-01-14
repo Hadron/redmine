@@ -1,0 +1,123 @@
+# Dutch translation of redmine debconf templates.
+# Copyright (C) 2012 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the redmine package.
+# Jeroen Schot <schot@a-eskwadraat.nl>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: redmine 1.3.0+dfsg1-2\n"
+"Report-Msgid-Bugs-To: redmine@packages.debian.org\n"
+"POT-Creation-Date: 2010-08-13 14:00+0200\n"
+"PO-Revision-Date: 2012-02-09 15:37+0100\n"
+"Last-Translator: Jeroen Schot <schot@a-eskwadraat.nl>\n"
+"Language-Team: Debian l10n Dutch <debian-l10n-dutch@lists.debian.org>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: note
+#. Description
+#: ../templates:1001
+msgid "Redmine package now supports multiple instances"
+msgstr "Het pakket redmine ondersteunt nu meerdere instanties"
+
+#. Type: note
+#. Description
+#: ../templates:1001
+msgid ""
+"You are migrating from an unsupported version. The current instance will be "
+"now called the \"default\" instance. Please check your web server "
+"configuration files, see README.Debian."
+msgstr ""
+"U migreert vanaf een niet-ondersteunde versie. De huidige instantie zal "
+"vanaf nu de \"default\"-instantie worden genoemd. Controleer de configuratie "
+"van uw webserver, zie README.Debian."
+
+#. Type: string
+#. Description
+#: ../templates:2001
+msgid "Redmine instances to be deconfigured:"
+msgstr "Te deconfigureren redmine-instanties:"
+
+#. Type: string
+#. Description
+#: ../templates:2001
+msgid "Configuration files for these instances will be removed."
+msgstr "Configuratiebestanden van deze instanties zullen verwijderd worden."
+
+#. Type: string
+#. Description
+#: ../templates:2001
+msgid "Database (de)configuration will be asked accordingly."
+msgstr "Wanneer nodig zal u naar de database-(de)configuratie worden gevraagd."
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid "Redmine instances to be configured or upgraded:"
+msgstr ""
+"Instanties van redmine die geconfigureerd of opgewaardeerd moeten worden:"
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid "Space-separated list of instances identifiers."
+msgstr "Door spaties gescheiden lijst van instantie-namen."
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid ""
+"Each instance has its configuration files in /etc/redmine/<instance-"
+"identifier>/"
+msgstr ""
+"Elke instantie heeft haar configuratiebestanden in /etc/redmine/<instance-"
+"naam>/."
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid "To deconfigure an instance, remove its identifier from this list."
+msgstr ""
+"U kunt een instantie deconfigureren door haar naam uit deze lijst "
+"te verwijderen."
+
+#. Type: select
+#. Description
+#: ../templates:4001
+msgid "Default redmine language:"
+msgstr "Standaard taal voor redmine:"
+
+#. Type: error
+#. Description
+#: ../templates:5001
+msgid "redmine-${dbtype} package required"
+msgstr "Pakket redmine-${dbtype} vereist"
+
+#. Type: error
+#. Description
+#: ../templates:5001
+msgid ""
+"Redmine instance ${instance} is configured to use database type ${dbtype}, "
+"but the corresponding redmine-${dbtype} package is not installed."
+msgstr ""
+"De redmine-instantie ${instance} is geconfigureerd om het database-type "
+"${dbtype} te gebruiken, maar het bijbehorende pakket redmine-${dbtype} is "
+"niet geïnstalleerd."
+
+#. Type: error
+#. Description
+#: ../templates:5001
+msgid "Configuration of instance ${instance} is aborted."
+msgstr "De configuratie van de instantie ${instance} is afgebroken."
+
+#. Type: error
+#. Description
+#: ../templates:5001
+msgid ""
+"To finish that configuration, please install the redmine-${dbtype} package, "
+"and reconfigure redmine using:"
+msgstr ""
+"Om de configuratie te voltooien dient u het pakket redmine-${dbtype} te "
+"installeren en redmine opnieuw te configureren met:"

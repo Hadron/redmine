@@ -1,0 +1,27 @@
+redmine (3.0~20140825-1) unstable; urgency=medium
+
+  Running redmine as an unprivileged user re-using the system-wide
+  installation as a base (as previously documented in README.Debian) is not
+  supported anymore.
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sun, 21 Sep 2014 11:23:53 -0300
+
+redmine (2.1.4+dfsg2-2) experimental; urgency=low
+
+  An old secret session keys has to be replaced due incompatible changes
+  in the ruby classes, which would make redmine inaccessible for all
+  users with the old sessions cached in browser cookies.
+  The old session keys can be found in /etc/redmine/default/session.yml.dpkg-old
+
+ -- Ondřej Surý <ondrej@debian.org>  Wed, 12 Dec 2012 15:12:39 +0100
+
+redmine (2.1.4+dfsg2-1) experimental; urgency=low
+
+  This is work in progress.  It might and probably will break your
+  existing redmine application, so unless you understand ruby and you
+  want to help with debugging the Redmine 2 packaging, you should stop
+  now.  Seriously - this package in current state will probably break
+  your wash machine, eat your socks and run away with your husband/wife.
+  You should cancel the upgrade RIGHT NOW!
+
+ -- Ondřej Surý <ondrej@debian.org>  Mon, 15 Oct 2012 05:31:51 +0200

@@ -1,0 +1,16 @@
+# Install the basic application files
+app usr/share/redmine
+config usr/share/redmine
+db usr/share/redmine
+extra usr/share/redmine
+lib usr/share/redmine
+public usr/share/redmine
+Rakefile usr/share/redmine
+Gemfile usr/share/redmine
+script usr/share/redmine
+test usr/share/redmine
+config.ru usr/share/redmine
+lib/plugins/* usr/share/redmine/lib/plugins
+debian/conf/*.template usr/share/redmine/templates
+buildfonts/*.z usr/share/redmine/lib/plugins/rfpdf/lib/fonts
+buildfonts/*.rb usr/share/redmine/lib/plugins/rfpdf/lib/fonts

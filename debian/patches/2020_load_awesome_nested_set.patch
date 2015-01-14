@@ -1,0 +1,9 @@
+--- redmine.orig/config/initializers/10-patches.rb
++++ redmine/config/initializers/10-patches.rb
+@@ -1,5 +1,6 @@
+ require 'active_record'
+ require 'active_record/connection_adapters/abstract_mysql_adapter'
++require 'awesome_nested_set'
+ 
+ module ActiveRecord
+   module ConnectionAdapters

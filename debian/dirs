@@ -1,0 +1,5 @@
+var/log/redmine
+var/cache/redmine
+var/lib/redmine
+etc/redmine
+usr/share/redmine/tmp

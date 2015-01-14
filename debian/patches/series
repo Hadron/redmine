@@ -1,0 +1,12 @@
+2002_FHS_through_env_vars.patch
+2003_externalize_session_config.patch
+2004_FHS_plugins_assets.patch
+2008_force_table_encoding_mysql.patch
+2009_FHS_thin_config.patch
+2018_get_rid_of_rdoctask.patch
+1001_Parsedate.parsedate.patch
+2020_load_awesome_nested_set.patch
+gemfile-adjustments.patch
+drop-update_all.patch
+invalidate-language-cache-from-older-versions.diff
+avoid-crash-on-issues.diff
