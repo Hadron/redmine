@@ -28,7 +28,7 @@ Last-Update: 2013-09-28
          env = options[:env] || Rails.env
  
          @config = @defaults.dup
-@@ -106,7 +106,7 @@ module Redmine
+@@ -104,7 +104,7 @@ module Redmine
        end
  
        def load_deprecated_email_configuration(env)
@@ -39,7 +39,7 @@ Last-Update: 2013-09-28
            @config.merge!({'email_delivery' => load_from_yaml(deprecated_email_conf, env)})
 --- a/lib/redmine/export/pdf.rb
 +++ b/lib/redmine/export/pdf.rb
-@@ -34,7 +34,7 @@ module Redmine
+@@ -27,7 +27,7 @@ module Redmine
          attr_accessor :footer_date
  
          def initialize(lang, orientation='P')
@@ -68,15 +68,13 @@ Last-Update: 2013-09-28
  Bundler.require(*Rails.groups)
  
  module RedmineApp
-@@ -47,8 +58,19 @@ module RedmineApp
-     # Do not include all helpers
-     config.action_controller.include_all_helpers = false
+@@ -65,6 +74,17 @@
+ 
+     config.session_store :cookie_store, :key => '_redmine_session'
  
 +    # move tmp directory to RAILS_TMP
 +    config.paths['tmp'] = ENV['RAILS_TMP']
 +
-     config.session_store :cookie_store, :key => '_redmine_session'
- 
 +    # log path
 +    config.paths['log'] = File.join(ENV['RAILS_LOG'], "#{Rails.env}.log") unless !ENV['RAILS_LOG']
 +

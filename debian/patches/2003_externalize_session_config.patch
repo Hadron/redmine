@@ -50,9 +50,9 @@ Last-Update: 2010-01-10
 -task :generate_secret_token => ['config/initializers/secret_token.rb']
 --- a/config/application.rb
 +++ b/config/application.rb
-@@ -61,7 +61,20 @@ module RedmineApp
-     # move tmp directory to RAILS_TMP
-     config.paths['tmp'] = ENV['RAILS_TMP']
+@@ -74,7 +74,20 @@ module RedmineApp
+     # can change it (environments/ENV.rb would take precedence over it)
+     config.log_level = Rails.env.production? ? :info : :debug
  
 -    config.session_store :cookie_store, :key => '_redmine_session'
 +    # loads cookie based session session and secret keys
@@ -70,5 +70,5 @@ Last-Update: 2010-01-10
 +      config.session_store :cookie_store, :key => '_redmine_session', :path => (relativeUrlRoot.blank?) ? '/' : relativeUrlRoot
 +    end
  
-     # log path
-     config.paths['log'] = File.join(ENV['RAILS_LOG'], "#{Rails.env}.log") unless !ENV['RAILS_LOG']
+     # move tmp directory to RAILS_TMP
+     config.paths['tmp'] = ENV['RAILS_TMP']
