@@ -3,10 +3,6 @@
 
 include /usr/share/cdbs/1/rules/debhelper.mk
 
-buildfontsdir = buildfonts
-ttf2ufmbin = LANG=en_EN.utf8 ttf2ufm -W 0 -a -F
-makefontunibin = cd $(buildfontsdir) && /usr/bin/php $(CURDIR)/lib/plugins/rfpdf/lib/fonts/ttf2ufm/makefontuni_ruby.php
-
 binary-install/redmine::
 	# Clean up the "extra" license files with typos :)
 	find debian/redmine/usr/share/redmine -name "*LICEN*E*" -exec rm -f '{}' \;
@@ -32,40 +28,3 @@ binary-install/redmine::
 	# Mark scripts as executable until upstream fixes their .tar.gz archive build
 	chmod a+x debian/redmine/usr/share/redmine/Rakefile
 	chmod a+x debian/redmine/usr/share/redmine/extra/mail_handler/rdm-mailhandler.rb
-	chmod a+x debian/redmine/usr/share/redmine/lib/plugins/rfpdf/lib/fpdf/makefont.rb
-	chmod a+x debian/redmine/usr/share/redmine/lib/plugins/rfpdf/test/test_helper.rb
-
-	# some files are marked executable, fix them
-	chmod a-x debian/redmine/usr/share/redmine/lib/plugins/rfpdf/logo_example.png
-	chmod a-x debian/redmine/usr/share/redmine/lib/plugins/rfpdf/utf8test.txt
-	chmod a-x debian/redmine/usr/share/redmine/lib/plugins/rfpdf/lib/tcpdf.rb
-	chmod a-x debian/redmine/usr/share/redmine/lib/plugins/rfpdf/lib/config/lang/eng.rb
-	chmod a-x debian/redmine/usr/share/redmine/lib/plugins/rfpdf/lib/fonts/ttf2ufm/makefontuni_ruby.php
-	chmod a-x debian/redmine/usr/share/redmine/lib/plugins/rfpdf/lib/fonts/ttf2ufm/README.TXT
-
-	# install font files
-	mv $(buildfontsdir)/*.z debian/redmine/usr/share/redmine/lib/plugins/rfpdf/lib/fonts/
-	mv $(buildfontsdir)/*.rb debian/redmine/usr/share/redmine/lib/plugins/rfpdf/lib/fonts/
-
-build:
-	# build fonts
-	mkdir -p $(buildfontsdir)
-	$(ttf2ufmbin) /usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf $(buildfontsdir)/dejavusans
-	$(ttf2ufmbin) /usr/share/fonts/truetype/ttf-dejavu/DejaVuSans-Bold.ttf $(buildfontsdir)/dejavusansb
-	$(ttf2ufmbin) /usr/share/fonts/truetype/ttf-dejavu/DejaVuSans-Oblique.ttf $(buildfontsdir)/dejavusansi
-	$(ttf2ufmbin) /usr/share/fonts/truetype/ttf-dejavu/DejaVuSans-BoldOblique.ttf $(buildfontsdir)/dejavusansbi
-	$(ttf2ufmbin) /usr/share/fonts/truetype/freefont/FreeSans.ttf $(buildfontsdir)/freesans
-	$(ttf2ufmbin) /usr/share/fonts/truetype/freefont/FreeSansBold.ttf $(buildfontsdir)/freesansb
-	$(ttf2ufmbin) /usr/share/fonts/truetype/freefont/FreeSansOblique.ttf $(buildfontsdir)/freesansi
-	$(ttf2ufmbin) /usr/share/fonts/truetype/freefont/FreeSansBoldOblique.ttf $(buildfontsdir)/freesansbi
-	$(makefontunibin) /usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf dejavusans.ufm
-	$(makefontunibin) /usr/share/fonts/truetype/ttf-dejavu/DejaVuSans-Bold.ttf dejavusansb.ufm
-	$(makefontunibin) /usr/share/fonts/truetype/ttf-dejavu/DejaVuSans-Oblique.ttf dejavusansi.ufm
-	$(makefontunibin) /usr/share/fonts/truetype/ttf-dejavu/DejaVuSans-BoldOblique.ttf dejavusansbi.ufm
-	$(makefontunibin) /usr/share/fonts/truetype/freefont/FreeSans.ttf freesans.ufm
-	$(makefontunibin) /usr/share/fonts/truetype/freefont/FreeSansBold.ttf freesansb.ufm
-	$(makefontunibin) /usr/share/fonts/truetype/freefont/FreeSansOblique.ttf freesansi.ufm
-	$(makefontunibin) /usr/share/fonts/truetype/freefont/FreeSansBoldOblique.ttf freesansbi.ufm
-
-clean::
-	rm -rf $(buildfontsdir)

@@ -12,5 +12,3 @@ test usr/share/redmine
 config.ru usr/share/redmine
 lib/plugins/* usr/share/redmine/lib/plugins
 debian/conf/*.template usr/share/redmine/templates
-buildfonts/*.z usr/share/redmine/lib/plugins/rfpdf/lib/fonts
-buildfonts/*.rb usr/share/redmine/lib/plugins/rfpdf/lib/fonts

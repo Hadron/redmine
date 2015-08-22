@@ -88,21 +88,6 @@ Last-Update: 2013-09-28
      if File.exists?(File.join(File.dirname(__FILE__), 'additional_environment.rb'))
        instance_eval File.read(File.join(File.dirname(__FILE__), 'additional_environment.rb'))
      end
---- a/lib/plugins/rfpdf/lib/tcpdf.rb
-+++ b/lib/plugins/rfpdf/lib/tcpdf.rb
-@@ -89,10 +89,10 @@ class TCPDF
-   @@k_small_ratio = 2/3.0
-   
-   cattr_accessor :k_path_cache
--  @@k_path_cache = Rails.root.join('tmp')
-+  @@k_path_cache = ENV['RAILS_TMP'] ? ENV['RAILS_TMP'] : Rails.root.join('tmp')
-   
-   cattr_accessor :k_path_url_cache
--  @@k_path_url_cache = Rails.root.join('tmp')
-+  @@k_path_url_cache = ENV['RAILS_TMP'] ? ENV['RAILS_TMP'] : Rails.root.join('tmp')
-   
- 	attr_accessor :barcode
- 	
 --- a/lib/redmine/scm/adapters/abstract_adapter.rb
 +++ b/lib/redmine/scm/adapters/abstract_adapter.rb
 @@ -218,7 +218,7 @@ module Redmine
