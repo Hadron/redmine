@@ -8,4 +8,4 @@
 +    self.public_directory = ENV['RAILS_TMP'] ? File.join(ENV['RAILS_TMP'], 'plugin_assets') : File.join(Rails.root, 'public', 'plugin_assets')
  
      @registered_plugins = {}
-     class << self
+     @used_partials = {}
