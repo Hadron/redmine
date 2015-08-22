@@ -15,7 +15,7 @@ Last-Update: 2013-09-28
 -  @@thumbnails_storage_path = File.join(Rails.root, "tmp", "thumbnails")
 +  @@thumbnails_storage_path = ENV['RAILS_TMP'] ? File.join(ENV['RAILS_TMP'], "thumbnails") : File.join(Rails.root, "tmp", "thumbnails")
  
-   before_save :files_to_final_location
+   before_create :files_to_final_location
    after_destroy :delete_from_disk
 --- a/lib/redmine/configuration.rb
 +++ b/lib/redmine/configuration.rb
