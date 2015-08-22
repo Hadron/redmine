@@ -7,6 +7,3 @@
 1001_Parsedate.parsedate.patch
 2020_load_awesome_nested_set.patch
 gemfile-adjustments.patch
-drop-update_all.patch
-invalidate-language-cache-from-older-versions.diff
-avoid-crash-on-issues.diff
